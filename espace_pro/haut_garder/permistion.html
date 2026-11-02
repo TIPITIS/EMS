@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des permissions — LSHD</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/admin-tools.css">
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/admin-tools.js" defer></script>
+</head>
+<body
+  class="workspace-body admin-body"
+  data-protected-page
+  data-access="medecin_senior|responsable|directeur_adjoint|directeur|admin|dev"
+  data-login-url="../../connexion.html"
+  data-audit-ignore
+>
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Haut grade</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-container">
+      <div class="admin-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">HAUT GRADE</p>
+          <h1>Permissions des comptes</h1>
+          <p class="muted">
+            Un seul rôle principal par compte. Les sous-permissions sont cumulables.
+          </p>
+        </div>
+        <a class="button button-outline" href="../espace.html#accueil">
+          Retour à l’espace pro
+        </a>
+      </div>
+
+      <div class="admin-demo-notice">
+        <strong>Mode démonstration :</strong>
+        les comptes et permissions sont enregistrés dans le navigateur actuel.
+        Le dépôt ne contient pas encore d’annuaire de comptes partagé.
+      </div>
+
+      <div class="permission-layout">
+        <aside class="admin-panel account-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Comptes</h2>
+              <p id="account-count">0 compte</p>
+            </div>
+          </div>
+
+          <label class="admin-field">
+            <span>Rechercher un compte</span>
+            <input
+              id="account-search"
+              type="search"
+              placeholder="Nom ou identifiant"
+              autocomplete="off"
+            >
+          </label>
+
+          <label class="admin-field">
+            <span>Filtrer par rôle principal</span>
+            <select id="account-role-filter">
+              <option value="">Tous les rôles</option>
+            </select>
+          </label>
+
+          <div class="account-list" id="account-list"></div>
+          <p class="empty-state" id="account-empty" hidden>
+            Aucun compte ne correspond à la recherche.
+          </p>
+        </aside>
+
+        <section class="admin-panel permission-panel">
+          <div id="permission-no-selection" class="empty-state">
+            Choisis un compte dans la liste pour afficher ses permissions.
+          </div>
+
+          <div id="permission-editor" hidden>
+            <div class="selected-account-heading">
+              <div>
+                <p class="eyebrow eyebrow-blue">COMPTE SÉLECTIONNÉ</p>
+                <h2 id="selected-account-name">Compte</h2>
+                <p class="muted" id="selected-account-id"></p>
+              </div>
+              <span class="role-badge" id="selected-primary-badge">Sans rôle</span>
+            </div>
+
+            <div class="role-section">
+              <div class="panel-heading">
+                <div>
+                  <h3>Permission principale</h3>
+                  <p>Un seul choix possible.</p>
+                </div>
+              </div>
+              <div class="role-grid" id="primary-role-options"></div>
+            </div>
+
+            <div class="role-section">
+              <div class="panel-heading">
+                <div>
+                  <h3>Sous-permissions cumulables</h3>
+                  <p>Plusieurs choix possibles selon les autorisations du compte.</p>
+                </div>
+              </div>
+              <div class="role-grid" id="subpermission-options"></div>
+            </div>
+
+            <div class="grant-rules">
+              <h3>Règles d’attribution proposées</h3>
+              <ul>
+                <li>Directeur adjoint : Directeur ou supérieur.</li>
+                <li>Responsable : Directeur adjoint ou supérieur.</li>
+                <li>Médecin senior : Responsable ou supérieur.</li>
+                <li>Médecin, junior, interne, infirmier et auxiliaire : Responsable ou supérieur.</li>
+                <li>Directeur IRS, Police et Avocat : Directeur adjoint ou supérieur.</li>
+                <li>Sous-permissions : Médecin senior ou supérieur.</li>
+              </ul>
+              <p>Ces règles suivent ta proposition et pourront être ajustées ensuite.</p>
+            </div>
+
+            <div class="permission-actions">
+              <p id="permission-feedback" class="permission-feedback" aria-live="polite"></p>
+              <button class="button button-primary" id="save-permissions" type="button">
+                Enregistrer les permissions
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logs développeur — LSHD</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/admin-tools.css">
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/admin-tools.js" defer></script>
+</head>
+<body
+  class="workspace-body admin-body"
+  data-protected-page
+  data-access="dev|admin|directeur"
+  data-login-url="../../connexion.html"
+  data-audit-ignore
+>
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Développeur</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-container">
+      <div class="admin-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE DÉVELOPPEUR</p>
+          <h1>Journal des activités</h1>
+          <p class="muted">
+            Connexions, consultations et actions enregistrées sur ce navigateur.
+          </p>
+        </div>
+        <a class="button button-outline" href="../espace.html#accueil">
+          Retour à l’espace pro
+        </a>
+      </div>
+
+      <div class="admin-demo-notice">
+        <strong>Mode démonstration :</strong>
+        ces logs sont enregistrés uniquement dans le navigateur actuel.
+      </div>
+
+      <section class="admin-panel" aria-label="Filtres des logs">
+        <div class="log-filters">
+          <label class="admin-field admin-search">
+            <span>Recherche</span>
+            <input
+              id="log-search"
+              type="search"
+              placeholder="Compte, page, action ou détail"
+              autocomplete="off"
+            >
+          </label>
+
+          <label class="admin-field">
+            <span>Date de début</span>
+            <input id="log-date-from" type="date">
+          </label>
+
+          <label class="admin-field">
+            <span>Date de fin</span>
+            <input id="log-date-to" type="date">
+          </label>
+
+          <label class="admin-field">
+            <span>Compte</span>
+            <select id="log-account-filter">
+              <option value="">Tous les comptes</option>
+            </select>
+          </label>
+
+          <label class="admin-field">
+            <span>Action</span>
+            <select id="log-action-filter">
+              <option value="">Toutes les actions</option>
+            </select>
+          </label>
+
+          <button class="button button-outline filter-reset" id="log-reset" type="button">
+            Réinitialiser
+          </button>
+        </div>
+
+        <div class="log-summary">
+          <strong id="log-count">0 activité</strong>
+          <span>Les mots de passe et les valeurs saisies dans les champs ne sont pas enregistrés.</span>
+        </div>
+      </section>
+
+      <section class="admin-panel log-table-panel" aria-label="Historique des activités">
+        <div class="table-scroll">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th scope="col">Date et heure</th>
+                <th scope="col">Compte</th>
+                <th scope="col">Rôle</th>
+                <th scope="col">Action</th>
+                <th scope="col">Détail</th>
+                <th scope="col">Page</th>
+              </tr>
+            </thead>
+            <tbody id="log-results"></tbody>
+          </table>
+        </div>
+        <p class="empty-state" id="log-empty" hidden>
+          Aucune activité ne correspond à ces filtres.
+        </p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

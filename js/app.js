@@ -1,31 +1,21 @@
 // JavaScript commun du site LSHD.
-// La session et les rôles sont stockés dans le navigateur.
-// Cette maquette ne protège pas de vraies données.
+// La session, les logs et les permissions sont stockés dans le navigateur.
+// Cette version est une démonstration : elle ne protège pas de vraies données.
 
 "use strict";
 
-function getLoginUrl() {
-  if (document.body.dataset.loginUrl) {
-    return document.body.dataset.loginUrl;
-  }
+const LSHD_KEYS = {
+  session: "lshd-demo-user",
+  accounts: "lshd-demo-accounts",
+  logs: "lshd-audit-logs"
+};
 
-  const parts = window.location.pathname.split("/").filter(Boolean);
-  const professionalIndex = parts.lastIndexOf("espace_pro");
-
-  if (professionalIndex >= 0) {
-    const nestedFolders = Math.max(0, parts.length - professionalIndex - 2);
-    return "../".repeat(nestedFolders + 1) + "connexion.html";
-  }
-
-  return "connexion.html";
-}
-
-function readUser() {
+function safeReadJson(storage, key, fallback) {
   try {
-    return JSON.parse(sessionStorage.getItem("lshd-demo-user") || "null");
+    const value = storage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
   } catch {
-    sessionStorage.removeItem("lshd-demo-user");
-    return null;
+    return fallback;
   }
 }
 
@@ -46,10 +36,44 @@ function normalizePermission(value) {
     directeur_general: "directeur",
     corps_medical: "corp_medical",
     medical: "corp_medical",
-    psychologue: "psychologie"
+    psychologue: "psychologie",
+    chirurgie: "chirurgie",
+    chirurgien: "chirurgie",
+    generaliste: "generaliste",
+    "auxiliaire_de_soin": "auxiliaire_soin"
   };
 
   return aliases[key] || key;
+}
+
+function readStoredAccounts() {
+  const accounts = safeReadJson(localStorage, LSHD_KEYS.accounts, []);
+  return Array.isArray(accounts) ? accounts : [];
+}
+
+function readUser() {
+  const sessionUser = safeReadJson(sessionStorage, LSHD_KEYS.session, null);
+  if (!sessionUser) return null;
+
+  const accounts = readStoredAccounts();
+  const savedAccount = accounts.find(account =>
+    String(account.username || "").toLowerCase() ===
+    String(sessionUser.username || "").toLowerCase()
+  );
+
+  if (!savedAccount) return sessionUser;
+
+  const primaryRole = savedAccount.primaryRole || savedAccount.role || sessionUser.role;
+  const subpermissions = Array.isArray(savedAccount.subpermissions)
+    ? savedAccount.subpermissions
+    : [];
+
+  return {
+    ...sessionUser,
+    role: primaryRole,
+    roles: primaryRole ? [primaryRole] : [],
+    permissions: subpermissions
+  };
 }
 
 function getUserPermissions(user) {
@@ -67,11 +91,11 @@ function userCanAccess(rule, user) {
   if (!user) return false;
 
   const permissions = getUserPermissions(user);
-  const hasFullAccess = permissions.some(permission =>
+  const fullAccess = permissions.some(permission =>
     ["dev", "admin", "directeur"].includes(permission)
   );
 
-  if (hasFullAccess) return true;
+  if (fullAccess) return true;
 
   const required = String(rule || "connected")
     .split("|")
@@ -85,6 +109,63 @@ function userCanAccess(rule, user) {
   return required.some(permission => permissions.includes(permission));
 }
 
+function getLoginUrl() {
+  if (document.body.dataset.loginUrl) {
+    return document.body.dataset.loginUrl;
+  }
+
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const professionalIndex = parts.lastIndexOf("espace_pro");
+
+  if (professionalIndex >= 0) {
+    const nestedFolders = Math.max(0, parts.length - professionalIndex - 2);
+    return "../".repeat(nestedFolders + 1) + "connexion.html";
+  }
+
+  return "connexion.html";
+}
+
+function recordAudit(action, details, actorOverride, accountOverride) {
+  const currentUser = actorOverride || readUser();
+  const now = new Date();
+
+  const entry = {
+    id: `${now.getTime()}-${Math.random().toString(16).slice(2)}`,
+    timestamp: now.toISOString(),
+    account: accountOverride || currentUser?.username || "Anonyme",
+    role: currentUser?.role || "Non connecté",
+    action: String(action || "Action"),
+    details: String(details || ""),
+    page: window.location.pathname
+  };
+
+  const logs = safeReadJson(localStorage, LSHD_KEYS.logs, []);
+  const updatedLogs = Array.isArray(logs) ? logs : [];
+  updatedLogs.unshift(entry);
+
+  try {
+    localStorage.setItem(LSHD_KEYS.logs, JSON.stringify(updatedLogs.slice(0, 5000)));
+  } catch {
+    // Si le stockage est plein, on ne bloque pas le fonctionnement du site.
+  }
+
+  return entry;
+}
+
+window.LSHD = {
+  keys: LSHD_KEYS,
+  normalizePermission,
+  getUserPermissions,
+  userCanAccess,
+  readUser,
+  readStoredAccounts,
+  recordAudit,
+  readAuditLogs() {
+    const logs = safeReadJson(localStorage, LSHD_KEYS.logs, []);
+    return Array.isArray(logs) ? logs : [];
+  }
+};
+
 function redirectToLogin() {
   window.location.replace(getLoginUrl());
 }
@@ -95,16 +176,12 @@ function closeDropdown(group) {
   group.classList.remove("open");
 
   const button = group.querySelector(".nav-group-button");
-  if (button) {
-    button.setAttribute("aria-expanded", "false");
-  }
+  if (button) button.setAttribute("aria-expanded", "false");
 }
 
 function closeAllDropdowns(exceptGroup) {
   document.querySelectorAll(".nav-group.open").forEach(group => {
-    if (group !== exceptGroup) {
-      closeDropdown(group);
-    }
+    if (group !== exceptGroup) closeDropdown(group);
   });
 }
 
@@ -128,31 +205,22 @@ function setupDropdowns() {
     });
 
     group.addEventListener("pointerleave", () => {
-      if (desktopPointer.matches) {
-        closeDropdown(group);
-      }
+      if (desktopPointer.matches) closeDropdown(group);
     });
 
     group.addEventListener("focusout", event => {
-      if (
-        desktopPointer.matches &&
-        !group.contains(event.relatedTarget)
-      ) {
+      if (desktopPointer.matches && !group.contains(event.relatedTarget)) {
         closeDropdown(group);
       }
     });
   });
 
   document.addEventListener("click", event => {
-    if (!event.target.closest(".nav-group")) {
-      closeAllDropdowns();
-    }
+    if (!event.target.closest(".nav-group")) closeAllDropdowns();
   });
 
   document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      closeAllDropdowns();
-    }
+    if (event.key === "Escape") closeAllDropdowns();
   });
 }
 
@@ -168,10 +236,7 @@ function applyAccessRules(user) {
       .some(link => !link.hidden);
 
     group.hidden = !hasVisibleLink;
-
-    if (!hasVisibleLink) {
-      closeDropdown(group);
-    }
+    if (!hasVisibleLink) closeDropdown(group);
   });
 }
 
@@ -199,19 +264,26 @@ function setupLogin() {
     );
 
     if (!account) {
+      recordAudit(
+        "Échec de connexion",
+        "Identifiant ou mot de passe incorrect",
+        null,
+        username || "Nom non renseigné"
+      );
+
       if (feedback) {
         feedback.textContent = "Nom d’utilisateur ou mot de passe incorrect.";
       }
       return;
     }
 
-    sessionStorage.setItem(
-      "lshd-demo-user",
-      JSON.stringify({
-        username: account.username,
-        role: account.role
-      })
-    );
+    const connectedUser = {
+      username: account.username,
+      role: account.role
+    };
+
+    sessionStorage.setItem(LSHD_KEYS.session, JSON.stringify(connectedUser));
+    recordAudit("Connexion réussie", "Connexion à l’espace professionnel", connectedUser);
 
     window.location.href = "espace_pro/espace.html#accueil";
   });
@@ -239,7 +311,7 @@ const workspacePages = {
   "psy-pplh": {
     title: "PPLH",
     description: "Évaluations liées au PPLH.",
-    message: "Les supports liés au PPLH seront ajoutés ici.",
+    message: "Le fichier PPLH sera ajouté ici.",
     access: "psychologie"
   },
   "formation-medicale": {
@@ -305,13 +377,13 @@ const workspacePages = {
   "haut-grade": {
     title: "Haut grade",
     description: "Outils réservés aux responsables.",
-    message: "Les avis et la gestion des permissions seront ajoutés ici.",
+    message: "Les annonces, les avis et les permissions seront regroupés ici.",
     access: "medecin_senior|responsable|directeur_adjoint"
   },
   "dev-logs": {
     title: "Logs développeur",
-    description: "Journal technique du site.",
-    message: "Aucun journal technique n’est conservé dans cette maquette.",
+    description: "Journal des activités du site.",
+    message: "Le journal complet est disponible dans la page Logs.",
     access: "dev|admin|directeur"
   },
   parametres: {
@@ -394,10 +466,9 @@ function renderWorkspacePage(user) {
     ];
 
     shortcuts.forEach(item => {
-      if (!userCanAccess(item[3], user)) return;
-
-      const card = createWorkspaceCard(item[0], item[1], item[2]);
-      cards.append(card);
+      if (userCanAccess(item[3], user)) {
+        cards.append(createWorkspaceCard(item[0], item[1], item[2]));
+      }
     });
 
     content.append(intro, cards);
@@ -409,7 +480,6 @@ function renderWorkspacePage(user) {
 
   const icon = document.createElement("span");
   icon.className = "empty-panel-icon";
-  icon.setAttribute("aria-hidden", "true");
   icon.textContent = "✚";
 
   const message = document.createElement("p");
@@ -462,20 +532,64 @@ function setupWorkspace(user) {
       menuButton.querySelector("span").textContent =
         isOpen ? "Fermer le menu" : "Ouvrir le menu";
     });
-
-    navigation.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
-        if (window.matchMedia("(max-width: 760px)").matches) {
-          navigation.classList.remove("open");
-          menuButton.setAttribute("aria-expanded", "false");
-          menuButton.querySelector("span").textContent = "Ouvrir le menu";
-        }
-      });
-    });
   }
 
+  recordAudit("Consultation de page", document.title, user);
+
   renderWorkspacePage(user);
-  window.addEventListener("hashchange", () => renderWorkspacePage(user));
+  window.addEventListener("hashchange", () => {
+    recordAudit("Navigation interne", window.location.hash, user);
+    renderWorkspacePage(user);
+  });
+}
+
+function setupAuditCapture() {
+  document.addEventListener("click", event => {
+    if (document.body.hasAttribute("data-audit-ignore")) return;
+    if (event.target.closest("[data-audit-ignore]")) return;
+
+    const target = event.target.closest("a, button");
+    if (!target || target.hasAttribute("data-logout")) return;
+
+    const label = (target.innerText || target.getAttribute("aria-label") || "")
+      .trim()
+      .replace(/\s+/g, " ");
+
+    if (label) {
+      recordAudit(
+        target.tagName === "A" ? "Clic sur un lien" : "Clic sur un bouton",
+        label
+      );
+    }
+  });
+
+  document.addEventListener("change", event => {
+    if (document.body.hasAttribute("data-audit-ignore")) return;
+    if (event.target.closest("[data-audit-ignore]")) return;
+
+    const field = event.target;
+    if (!(field instanceof HTMLInputElement ||
+          field instanceof HTMLSelectElement ||
+          field instanceof HTMLTextAreaElement)) return;
+
+    if (field.type === "password") return;
+
+    const label = field.labels?.[0]?.innerText || field.name || field.id || "Champ";
+    recordAudit("Modification d’un champ", label.trim());
+  });
+
+  document.addEventListener("submit", event => {
+    if (event.target.id === "login-form") return;
+    if (event.target.closest("[data-audit-ignore]")) return;
+
+    const formName =
+      event.target.getAttribute("aria-label") ||
+      event.target.id ||
+      event.target.className ||
+      "Formulaire";
+
+    recordAudit("Envoi d’un formulaire", String(formName));
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -499,7 +613,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll("[data-logout]").forEach(button => {
     button.addEventListener("click", () => {
-      sessionStorage.removeItem("lshd-demo-user");
+      recordAudit("Déconnexion", "Fin de session", user);
+      sessionStorage.removeItem(LSHD_KEYS.session);
       window.location.href = getLoginUrl();
     });
   });
@@ -516,5 +631,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  setupAuditCapture();
   setupWorkspace(user);
 });
