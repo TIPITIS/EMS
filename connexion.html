@@ -8,37 +8,83 @@
   <script src="js/app.js" defer></script>
 </head>
 <body>
-  <div class="topline"><div class="container topline-content"><span>✚</span><span>Los Santos Health Department</span></div></div>
+  <div class="topline">
+    <div class="container topline-content">
+      <span aria-hidden="true">✚</span>
+      <span>Los Santos Health Department</span>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="index.html"><span class="brand-mark">✚</span><span class="brand-text"><small>LOS SANTOS</small><strong>Health Department</strong></span></a>
-      <a class="button button-outline button-small" href="index.html">← Retour à l’accueil</a>
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">✚</span>
+        <span class="brand-text">
+          <small>LOS SANTOS</small>
+          <strong>Health Department</strong>
+        </span>
+      </a>
+
+      <a class="button button-outline button-small" href="index.html">
+        ← Retour à l’accueil
+      </a>
     </div>
   </header>
 
   <main class="auth-background">
     <section class="auth-card">
-      <div class="auth-symbol">✚</div>
+      <div class="auth-symbol" aria-hidden="true">✚</div>
+
       <p class="eyebrow eyebrow-blue">ESPACE MEMBRE</p>
       <h1>Se connecter</h1>
-      <p class="muted">La connexion sera activée après la mise en place d’un serveur sécurisé.</p>
+      <p class="muted">Connecte-toi à ton espace de démonstration.</p>
 
-      <form class="demo-form">
-        <label for="email">Adresse e-mail</label>
-        <input id="email" type="email" autocomplete="email" placeholder="nom@exemple.com" required>
+      <div class="notice notice-warning">
+        <span aria-hidden="true">⚠</span>
+        <p>
+          <strong>Compte de test uniquement.</strong>
+          Cette connexion n’est pas sécurisée et ne doit pas servir à protéger
+          de vraies données.
+        </p>
+      </div>
+
+      <form id="login-form" class="login-form">
+        <label for="username">Nom d’utilisateur</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          autocomplete="username"
+          placeholder="Nom d’utilisateur"
+          required
+        >
 
         <label for="password">Mot de passe</label>
-        <input id="password" type="password" autocomplete="current-password" placeholder="Mot de passe" required>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Mot de passe"
+          required
+        >
 
-        <button class="button button-primary button-wide" type="submit">Connexion indisponible en V0.1</button>
-        <p class="form-feedback" aria-live="polite"></p>
+        <button class="button button-primary button-wide" type="submit">
+          Se connecter
+        </button>
+
+        <p id="login-feedback" class="form-feedback" aria-live="polite"></p>
       </form>
 
-      <p class="auth-foot">Pas encore de compte ? <a href="creation-compte.html">Faire une demande</a></p>
-      <p class="security-note">Cette maquette ne vérifie aucun compte et ne stocke aucune donnée.</p>
+      <p class="auth-foot">
+        Pas encore de compte ?
+        <a href="creation-compte.html">Faire une demande</a>
+      </p>
     </section>
   </main>
 
-  <footer class="auth-footer"><a href="index.html">LSHD</a> · Projet GTA RP · Version 0.1</footer>
+  <footer class="auth-footer">
+    <a href="index.html">LSHD</a> · Projet GTA RP · Version 0.1
+  </footer>
 </body>
 </html>
