@@ -896,7 +896,7 @@ textarea:focus {
 
 .nav-dropdown {
   position: absolute;
-  top: calc(100% + 7px);
+  top: 100%;
   left: 0;
   z-index: 20;
   width: max-content;
@@ -1297,6 +1297,28 @@ textarea:focus {
 
   .demo-badge {
     align-self: flex-start;
+  }
+}
+
+/* Accessibilité et fermeture des menus déroulants */
+
+.nav-group-button:focus-visible,
+.workspace-nav-link:focus-visible,
+.nav-dropdown a:focus-visible,
+.workspace-menu-toggle:focus-visible {
+  outline: 3px solid rgba(75, 155, 200, 0.45);
+  outline-offset: 2px;
+}
+
+.nav-group-button[aria-expanded="true"] {
+  color: var(--navy);
+  background: #dcecf8;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 761px) {
+  .nav-group:hover .nav-dropdown,
+  .nav-group:focus-within .nav-dropdown {
+    display: block;
   }
 }
 
