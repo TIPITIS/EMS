@@ -3,15 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mon espace — LSHD</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/app.js" defer></script>
+  <title>Espace professionnel — LSHD</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    .workspace-nav { position: sticky; top: 0; }
+    .workspace-nav-inner { flex-wrap: wrap; overflow: visible; }
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+    .workspace-tile {
+      display: block;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      transition: .18s ease;
+    }
+    .workspace-tile:hover {
+      transform: translateY(-2px);
+      border-color: #9fc4dc;
+      box-shadow: var(--shadow);
+    }
+    .workspace-tile strong {
+      display: block;
+      margin: 8px 0 5px;
+      color: var(--navy);
+    }
+    .workspace-tile span { color: var(--muted); font-size: 13px; }
+    .tile-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--sky);
+      color: var(--blue);
+      font-size: 20px;
+    }
+    .workspace-form {
+      max-width: 780px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    .workspace-form button { margin-top: 14px; }
+    .preview-box {
+      display: none;
+      margin-top: 18px;
+      padding: 18px;
+      border-left: 4px solid #347fa9;
+      border-radius: 8px;
+      background: #f1f9fd;
+      white-space: pre-wrap;
+    }
+    .preview-box.visible { display: block; }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 760px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+      .workspace-nav { position: static; }
+    }
+  </style>
 </head>
 
-<body class="workspace-body" data-protected-page>
+<body class="workspace-body">
   <header class="workspace-header">
     <a class="workspace-brand" href="espace.html#accueil">
-      <span class="workspace-brand-icon">✚</span>
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
       <span>
         <strong>LSHD</strong>
         <small>Los Santos Health Department</small>
@@ -19,12 +83,12 @@
     </a>
 
     <div class="workspace-user">
-      <div class="user-avatar">♙</div>
+      <div class="user-avatar" aria-hidden="true">♙</div>
       <div class="user-info">
-        <strong data-user-name>membre</strong>
-        <small data-user-role>Grade</small>
+        <strong id="member-name">Membre</strong>
+        <small id="member-role">Personnel médical</small>
       </div>
-      <button class="button button-outline button-small" type="button" data-logout>
+      <button class="button button-outline button-small" type="button" id="logout-button">
         Déconnexion
       </button>
     </div>
@@ -35,66 +99,27 @@
     type="button"
     aria-expanded="false"
     aria-controls="workspace-nav"
+    id="menu-toggle"
   >
     ☰ <span>Ouvrir le menu</span>
   </button>
 
-  <nav class="workspace-nav" id="workspace-nav" aria-label="Menu de l’espace membre">
+  <nav class="workspace-nav" id="workspace-nav" aria-label="Menu de l’espace professionnel">
     <div class="workspace-nav-inner">
-      <a class="workspace-nav-link active" href="#accueil" data-page-link="accueil">
-        Accueil
-      </a>
-
-      <a class="workspace-nav-link" href="#patients" data-page-link="patients">
-        Patients
-      </a>
-
-      <a class="workspace-nav-link" href="#agenda" data-page-link="agenda">
-        Agenda
-      </a>
+      <a class="workspace-nav-link" href="#accueil" data-page="accueil">Accueil</a>
+      <a class="workspace-nav-link" href="#patients" data-page="patients">Patients</a>
+      <a class="workspace-nav-link" href="#agenda" data-page="agenda">Agenda</a>
 
       <div class="nav-group">
         <button class="nav-group-button" type="button" aria-expanded="false">
           Psychologie <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a href="#psy-ppa" data-page-link="psy-ppa">PPA</a>
-          <a href="#psy-formation-ppa" data-page-link="psy-formation-ppa">Formation PPA</a>
-          <a href="#psy-ppa-police" data-page-link="psy-ppa-police">PPA Police</a>
-          <a href="#psy-formation-ppa-police" data-page-link="psy-formation-ppa-police">Formation PPA Police</a>
-          <a href="#psy-pc" data-page-link="psy-pc">PC</a>
-          <a href="#psy-formation-pc" data-page-link="psy-formation-pc">Formation PC</a>
-          <a href="#psy-pplh" data-page-link="psy-pplh">PPLH</a>
-          <a href="#psy-formation-pplh" data-page-link="psy-formation-pplh">Formation PPLH</a>
-          <a href="#psy-suivi-patient" data-page-link="psy-suivi-patient">Suivi patient</a>
-        </div>
-      </div>
-
-      <div class="nav-group">
-        <button class="nav-group-button" type="button" aria-expanded="false">
-          Addictologie <span aria-hidden="true">⌄</span>
-        </button>
-        <div class="nav-dropdown">
-          <a href="#addicto-bilan" data-page-link="addicto-bilan">Bilan addictologique</a>
-          <a href="#addicto-sevrage" data-page-link="addicto-sevrage">Suivi de sevrage</a>
-        </div>
-      </div>
-
-      <div class="nav-group">
-        <button class="nav-group-button" type="button" aria-expanded="false">
-          Psychiatrie <span aria-hidden="true">⌄</span>
-        </button>
-        <div class="nav-dropdown">
-          <a href="#psychiatrie" data-page-link="psychiatrie">Page à compléter</a>
-        </div>
-      </div>
-
-      <div class="nav-group">
-        <button class="nav-group-button" type="button" aria-expanded="false">
-          Kinésithérapie <span aria-hidden="true">⌄</span>
-        </button>
-        <div class="nav-dropdown">
-          <a href="#kinesitherapie" data-page-link="kinesitherapie">Page à compléter</a>
+          <a href="#psy-ppa" data-page="psy-ppa">PPA</a>
+          <a href="#psy-ppa-police" data-page="psy-ppa-police">PPA Police</a>
+          <a href="#psy-pc" data-page="psy-pc">PC</a>
+          <a href="#psy-pplh" data-page="psy-pplh">PPLH</a>
+          <a href="#psy-suivi" data-page="psy-suivi">Suivi patient</a>
         </div>
       </div>
 
@@ -103,12 +128,13 @@
           Services <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a href="#formation-outils" data-page-link="formation-outils">Outils de base</a>
-          <a href="#formation-tenues" data-page-link="formation-tenues">Tenues</a>
-          <a href="#formation-vehicules" data-page-link="formation-vehicules">Véhicules</a>
-          <a href="#formation-medicale" data-page-link="formation-medicale">Formation médicale</a>
-          <a href="#chirurgie" data-page-link="chirurgie">Chirurgie</a>
-          <a href="#generaliste" data-page-link="generaliste">Médecine générale</a>
+          <a href="#outils" data-page="outils">Outils de base</a>
+          <a href="#tenues" data-page="tenues">Tenues</a>
+          <a href="#vehicules" data-page="vehicules">Véhicules</a>
+          <a href="#formation" data-page="formation">Formation médicale</a>
+          <a href="#chirurgie" data-page="chirurgie">Chirurgie</a>
+          <a href="#generaliste" data-page="generaliste">Médecine générale</a>
+          <a href="#kinesitherapie" data-page="kinesitherapie">Kinésithérapie</a>
         </div>
       </div>
 
@@ -117,13 +143,11 @@
           Documents <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a href="#doc-visite" data-page-link="doc-visite">Visite médicale</a>
-          <a href="#doc-visite-supervision" data-page-link="doc-visite-supervision">Superviser une visite</a>
-          <a href="#doc-arret" data-page-link="doc-arret">Arrêt de travail</a>
-          <a href="#doc-arret-supervision" data-page-link="doc-arret-supervision">Superviser un arrêt</a>
-          <a href="#doc-blessures" data-page-link="doc-blessures">Attestation de coups et blessures</a>
-          <a href="#doc-deces" data-page-link="doc-deces">Certificat de décès</a>
-          <a href="#doc-registre" data-page-link="doc-registre">Registre des documents</a>
+          <a href="#visite" data-page="visite">Visite médicale</a>
+          <a href="#arret" data-page="arret">Arrêt de travail</a>
+          <a href="#blessures" data-page="blessures">Coups et blessures</a>
+          <a href="#deces" data-page="deces">Certificat de décès</a>
+          <a href="#registre" data-page="registre">Registre des documents</a>
         </div>
       </div>
 
@@ -132,16 +156,14 @@
           Administration <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a href="#personnel" data-page-link="personnel">Personnel</a>
-          <a href="#haut-garde" data-page-link="haut-garde">Haut grade</a>
-          <a href="#direction" data-page-link="direction">Direction</a>
-          <a href="#dev-logs" data-page-link="dev-logs">Logs développeur</a>
+          <a href="#personnel" data-page="personnel">Mon espace personnel</a>
+          <a href="#haut-grade" data-page="haut-grade">Haut grade</a>
+          <a href="#direction" data-page="direction">Direction</a>
+          <a href="#logs" data-page="logs">Logs développeur</a>
         </div>
       </div>
 
-      <a class="workspace-nav-link" href="#parametres" data-page-link="parametres">
-        Paramètres
-      </a>
+      <a class="workspace-nav-link" href="#parametres" data-page="parametres">Paramètres</a>
     </div>
   </nav>
 
@@ -149,32 +171,258 @@
     <div class="container workspace-container">
       <div class="workspace-heading">
         <div>
-          <p class="eyebrow eyebrow-blue">ESPACE MEMBRE</p>
-          <h1 id="workspace-title">Accueil</h1>
-          <p id="workspace-description" class="muted">
-            Bienvenue dans ton espace du LSHD.
+          <p class="eyebrow eyebrow-blue">ESPACE PROFESSIONNEL</p>
+          <h1 id="page-title">Accueil</h1>
+          <p id="page-description" class="muted">
+            Les outils et les informations du LSHD.
           </p>
         </div>
-        <span class="demo-badge">Démonstration V0.1</span>
+        <span class="demo-badge">Maquette de démonstration</span>
       </div>
 
       <div class="notice notice-warning workspace-warning">
         <span aria-hidden="true">⚠</span>
         <p>
-          Cet espace est une maquette publique. N’y ajoute pas de vrais dossiers
-          médicaux, mots de passe ou informations personnelles.
+          <strong>Version de démonstration.</strong>
+          Les formulaires affichent un aperçu dans le navigateur, mais rien n’est enregistré.
+          N’utilise aucune donnée réelle.
         </p>
       </div>
 
-      <section id="workspace-content" aria-live="polite"></section>
+      <section id="page-content" aria-live="polite"></section>
     </div>
   </main>
 
   <footer class="site-footer workspace-footer">
     <div class="container footer-bottom">
       <span>© <span data-year></span> LSHD · Projet GTA RP</span>
-      <a href="index.html">Retour au site public</a>
+      <a href="../index.html">Retour au site public</a>
     </div>
   </footer>
+
+  <script>
+    const pages = {
+      accueil: {
+        title: "Accueil",
+        description: "Les outils et les informations du LSHD.",
+        kind: "home"
+      },
+      patients: {
+        title: "Patients",
+        description: "Accès aux rubriques de suivi.",
+        message: "Les outils de suivi seront ajoutés dans une prochaine étape."
+      },
+      agenda: {
+        title: "Agenda du service",
+        description: "Réunions, formations et événements.",
+        message: "Aucun événement n’est renseigné pour le moment."
+      },
+
+      "psy-ppa": { title: "PPA", description: "Préparation et suivi des PPA.", message: "Le formulaire et les informations utiles seront ajoutés ici." },
+      "psy-ppa-police": { title: "PPA Police", description: "Suivi des demandes PPA de la police.", message: "Les informations liées au PPA Police seront ajoutées ici." },
+      "psy-pc": { title: "PC", description: "Évaluations psychologiques.", message: "Les supports liés aux PC seront ajoutés ici." },
+      "psy-pplh": { title: "PPLH", description: "Évaluations liées au PPLH.", message: "Les supports liés au PPLH seront ajoutés ici." },
+      "psy-suivi": { title: "Suivi patient — Psychologie", description: "Outils de suivi psychologique.", message: "Le formulaire de suivi sera préparé ici." },
+
+      outils: { title: "Outils de base", description: "Matériel et outils du service.", message: "La liste du matériel et les consignes seront ajoutées ici." },
+      tenues: { title: "Tenues", description: "Tenues du LSHD.", message: "Les tenues et leurs conditions d’utilisation seront présentées ici." },
+      vehicules: { title: "Véhicules", description: "Véhicules et règles d’utilisation.", message: "La liste des véhicules et les consignes seront ajoutées ici." },
+      formation: { title: "Formation médicale", description: "Supports de formation du service.", message: "Les supports de formation seront classés ici." },
+      chirurgie: { title: "Chirurgie", description: "Informations et supports de chirurgie.", message: "Les formations et procédures seront ajoutées ici." },
+      generaliste: { title: "Médecine générale", description: "Informations de médecine générale.", message: "Les supports seront ajoutés ici." },
+      kinesitherapie: { title: "Kinésithérapie", description: "Informations de kinésithérapie.", message: "Les supports seront ajoutés ici." },
+
+      visite: {
+        title: "Visite médicale",
+        description: "Préparer un compte rendu de visite.",
+        fields: ["Nom du patient", "Date de la visite", "Observations médicales", "Conclusion", "Recommandations"]
+      },
+      arret: {
+        title: "Attestation d’arrêt de travail",
+        description: "Préparer une attestation pour le jeu de rôle.",
+        fields: ["Nom du patient", "Date de l’examen", "Diagnostic", "Durée de l’arrêt", "Recommandations"]
+      },
+      blessures: {
+        title: "Attestation de coups et blessures",
+        description: "Préparer un compte rendu des blessures.",
+        fields: ["Nom du patient", "Date de l’examen", "Blessures constatées", "Examens réalisés", "Soins effectués", "Suivi et recommandations"]
+      },
+      deces: {
+        title: "Certificat de décès",
+        description: "Préparer les informations du certificat.",
+        fields: ["Nom de la personne décédée", "Date et heure du constat", "Lieu du constat", "Constatations", "Observations complémentaires"]
+      },
+      registre: { title: "Registre des documents", description: "Documents préparés dans cette maquette.", message: "Aucun document n’est conservé par le site. Un registre nécessitera un stockage sécurisé." },
+
+      personnel: { title: "Mon espace personnel", description: "Informations liées à ton compte LSHD.", message: "Le profil, le contrat, le règlement, le salaire et les primes seront regroupés ici." },
+      "haut-grade": { title: "Haut grade", description: "Outils réservés aux responsables.", message: "Les avis sur les médecins et la gestion des permissions seront ajoutés ici." },
+      direction: { title: "Direction", description: "Outils de gestion du service.", message: "La comptabilité, les documents, les primes et les salaires seront organisés ici." },
+      logs: { title: "Logs développeur", description: "Journal technique du site.", message: "Aucun journal technique n’est conservé dans cette maquette." },
+      parametres: { title: "Paramètres", description: "Préférences de l’espace professionnel.", message: "Les paramètres du compte seront ajoutés ici." }
+    };
+
+    const shortcuts = [
+      ["▤", "Documents", "Préparer une attestation ou un compte rendu.", "visite"],
+      ["▦", "Agenda", "Consulter les dates du service.", "agenda"],
+      ["♙", "Patients", "Accéder aux outils de suivi.", "patients"],
+      ["✚", "Formations", "Retrouver les supports du service.", "formation"],
+      ["⚕", "Psychologie", "Accéder aux rubriques de psychologie.", "psy-ppa"],
+      ["⚙", "Mon espace personnel", "Retrouver les informations du compte.", "personnel"]
+    ];
+
+    function renderPage() {
+      const id = location.hash.slice(1) || "accueil";
+      const page = pages[id] || pages.accueil;
+
+      document.getElementById("page-title").textContent = page.title;
+      document.getElementById("page-description").textContent = page.description;
+
+      document.querySelectorAll("[data-page]").forEach(link => {
+        link.classList.toggle("active", link.dataset.page === id);
+      });
+
+      const content = document.getElementById("page-content");
+      content.replaceChildren();
+
+      if (page.kind === "home") {
+        const intro = document.createElement("div");
+        intro.className = "welcome-panel";
+        intro.innerHTML =
+          "<p>Bienvenue dans ton espace professionnel.</p>" +
+          "<p>Choisis une rubrique pour accéder aux informations et aux outils du service.</p>";
+
+        const grid = document.createElement("div");
+        grid.className = "workspace-grid";
+
+        shortcuts.forEach(item => {
+          const card = document.createElement("a");
+          card.className = "workspace-tile";
+          card.href = "#" + item[3];
+
+          const icon = document.createElement("span");
+          icon.className = "tile-icon";
+          icon.textContent = item[0];
+
+          const title = document.createElement("strong");
+          title.textContent = item[1];
+
+          const description = document.createElement("span");
+          description.textContent = item[2];
+
+          card.append(icon, title, description);
+          grid.append(card);
+        });
+
+        content.append(intro, grid);
+        return;
+      }
+
+      if (page.fields) {
+        const form = document.createElement("form");
+        form.className = "workspace-form";
+        form.innerHTML =
+          '<p class="muted">Les informations servent uniquement à préparer un aperçu dans ton navigateur.</p>';
+
+        page.fields.forEach((label, index) => {
+          const wrapper = document.createElement("div");
+          const fieldLabel = document.createElement("label");
+          const field = document.createElement(index === 1 ? "input" : "textarea");
+
+          fieldLabel.textContent = label;
+          field.id = "field-" + index;
+          field.name = "field-" + index;
+
+          if (index === 1 && (id === "visite" || id === "arret" || id === "blessures" || id === "deces")) {
+            field.type = "datetime-local";
+          } else if (index !== 1) {
+            field.rows = 3;
+          }
+
+          wrapper.append(fieldLabel, field);
+          form.append(wrapper);
+        });
+
+        const button = document.createElement("button");
+        button.type = "submit";
+        button.className = "button button-primary";
+        button.textContent = "Prévisualiser le document";
+
+        const preview = document.createElement("div");
+        preview.className = "preview-box";
+        preview.setAttribute("aria-live", "polite");
+
+        form.append(button, preview);
+
+        form.addEventListener("submit", event => {
+          event.preventDefault();
+          const lines = [page.title.toUpperCase(), "LSHD — Document de jeu de rôle", ""];
+
+          page.fields.forEach((label, index) => {
+            const value = form.elements["field-" + index].value.trim();
+            lines.push(label + " : " + (value || "Non renseigné"), "");
+          });
+
+          preview.textContent = lines.join("\n");
+          preview.classList.add("visible");
+        });
+
+        content.append(form);
+        return;
+      }
+
+      const panel = document.createElement("div");
+      panel.className = "empty-panel";
+
+      const icon = document.createElement("span");
+      icon.className = "empty-panel-icon";
+      icon.textContent = "✚";
+
+      const message = document.createElement("p");
+      message.textContent = page.message || "Cette rubrique sera complétée prochainement.";
+
+      panel.append(icon, message);
+      content.append(panel);
+    }
+
+    document.querySelectorAll(".nav-group-button").forEach(button => {
+      button.addEventListener("click", () => {
+        const group = button.closest(".nav-group");
+        const open = !group.classList.contains("open");
+
+        document.querySelectorAll(".nav-group.open").forEach(item => {
+          item.classList.remove("open");
+          item.querySelector(".nav-group-button").setAttribute("aria-expanded", "false");
+        });
+
+        if (open) {
+          group.classList.add("open");
+          button.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    document.getElementById("menu-toggle").addEventListener("click", event => {
+      const open = document.getElementById("workspace-nav").classList.toggle("open");
+      event.currentTarget.setAttribute("aria-expanded", String(open));
+    });
+
+    document.getElementById("logout-button").addEventListener("click", () => {
+      sessionStorage.removeItem("lshd-demo-user");
+      location.href = "../connexion.html";
+    });
+
+    document.querySelectorAll("[data-year]").forEach(item => {
+      item.textContent = new Date().getFullYear();
+    });
+
+    const sessionUser = JSON.parse(sessionStorage.getItem("lshd-demo-user") || "null");
+    if (sessionUser) {
+      document.getElementById("member-name").textContent = sessionUser.username || "Membre";
+      document.getElementById("member-role").textContent = sessionUser.role || "Personnel médical";
+    }
+
+    window.addEventListener("hashchange", renderPage);
+    renderPage();
+  </script>
 </body>
 </html>
