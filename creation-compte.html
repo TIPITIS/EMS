@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demande de compte — LSHD</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="topline"><div class="container topline-content"><span>✚</span><span>Los Santos Health Department</span></div></div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">✚</span><span class="brand-text"><small>LOS SANTOS</small><strong>Health Department</strong></span></a>
+      <a class="button button-outline button-small" href="index.html">← Retour à l’accueil</a>
+    </div>
+  </header>
+
+  <main class="auth-background">
+    <section class="auth-card auth-card-wide">
+      <div class="auth-symbol">✚</div>
+      <p class="eyebrow eyebrow-blue">ESPACE MEMBRE</p>
+      <h1>Demander un compte</h1>
+      <p class="muted">Les comptes et les grades seront gérés par la direction dans une prochaine version.</p>
+
+      <form class="demo-form">
+        <div class="form-row">
+          <div>
+            <label for="rp-name">Nom et prénom RP</label>
+            <input id="rp-name" name="rp-name" placeholder="Ex. John Doe" required>
+          </div>
+          <div>
+            <label for="account-email">Adresse e-mail</label>
+            <input id="account-email" name="email" type="email" placeholder="nom@exemple.com" required>
+          </div>
+        </div>
+
+        <label for="requested-role">Fonction demandée</label>
+        <select id="requested-role" name="role">
+          <option>Membre du LSHD</option>
+          <option>Demande de recrutement</option>
+          <option>Autre</option>
+        </select>
+
+        <button class="button button-primary button-wide" type="submit">Envoyer une demande (démo)</button>
+        <p class="form-feedback" aria-live="polite"></p>
+      </form>
+
+      <p class="security-note">Le formulaire ne transmet ni ne conserve vos informations dans cette version.</p>
+    </section>
+  </main>
+
+  <footer class="auth-footer"><a href="index.html">LSHD</a> · Projet GTA RP · Version 0.1</footer>
+</body>
+</html>
