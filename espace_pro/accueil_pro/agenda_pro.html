@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LSHD — Agenda</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .breadcrumb { margin-bottom: 22px; color: var(--muted); font-size: 14px; }
+    .breadcrumb a { color: var(--blue); font-weight: 700; }
+  </style>
+</head>
+<body class="workspace-body" data-access="connected">
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <a class="button button-outline button-small" href="../espace.html#accueil">Retour à l’espace pro</a>
+  </header>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <nav class="breadcrumb">Vous êtes ici : <a href="../espace.html#accueil">Espace professionnel</a> › Accueil professionnel › <strong>Agenda</strong></nav>
+      <div class="workspace-heading">
+        <div><p class="eyebrow eyebrow-blue">ACCUEIL PROFESSIONNEL</p><h1>Agenda</h1><p class="muted">Réunions, formations et événements du LSHD.</p></div>
+      </div>
+      <div class="notice"><span>ℹ</span><p><strong>Agenda à compléter.</strong> Les dates du service seront ajoutées ici.</p></div>
+    </div>
+  </main>
+
+  <footer class="site-footer workspace-footer">
+    <div class="container footer-bottom"><span>© <span data-year></span> LSHD · Projet GTA RP</span><a href="../espace.html#accueil">Retour à l’espace professionnel</a></div>
+  </footer>
+
+  <script src="../../js/app.js" defer></script>
+  <script>
+    try {
+      const user = JSON.parse(sessionStorage.getItem("lshd-demo-user") || "null");
+      if (!user) location.replace("../../connexion.html");
+    } catch {
+      sessionStorage.removeItem("lshd-demo-user");
+      location.replace("../../connexion.html");
+    }
+  </script>
+</body>
+</html>

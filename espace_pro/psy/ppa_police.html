@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LSHD — PPA Police</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .breadcrumb { margin-bottom: 22px; color: var(--muted); font-size: 14px; }
+    .breadcrumb a { color: var(--blue); font-weight: 700; }
+  </style>
+</head>
+<body class="workspace-body" data-access="psychologie|police">
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <a class="button button-outline button-small" href="../espace.html#accueil">Retour à l’espace pro</a>
+  </header>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <nav class="breadcrumb">Vous êtes ici : <a href="../espace.html#accueil">Espace professionnel</a> › Psychologie › <strong>PPA Police</strong></nav>
+      <div class="workspace-heading">
+        <div><p class="eyebrow eyebrow-blue">PSYCHOLOGIE</p><h1>PPA Police</h1><p class="muted">Informations liées aux demandes PPA de la police.</p></div>
+      </div>
+      <div class="notice"><span>ℹ</span><p><strong>Page à compléter.</strong> Le formulaire et les consignes seront ajoutés ici.</p></div>
+    </div>
+  </main>
+
+  <footer class="site-footer workspace-footer">
+    <div class="container footer-bottom"><span>© <span data-year></span> LSHD · Projet GTA RP</span><a href="../espace.html#accueil">Retour à l’espace professionnel</a></div>
+  </footer>
+
+  <script src="../../js/app.js" defer></script>
+  <script>
+    function verifierAcces() {
+      try {
+        const user = JSON.parse(sessionStorage.getItem("lshd-demo-user") || "null");
+        if (!user) {
+          location.replace("../../connexion.html");
+          return;
+        }
+
+        const roles = [
+          ...(Array.isArray(user.roles) ? user.roles : []),
+          ...(user.role ? [user.role] : [])
+        ].map(role => role === "Développeur" ? "dev" : role);
+
+        const permissions = user.permissions || [];
+        const autorise =
+          roles.some(role => ["dev", "admin", "directeur"].includes(role)) ||
+          ["psychologie", "police"].some(role =>
+            roles.includes(role) || permissions.includes(role)
+          );
+
+        if (!autorise) location.replace("../espace.html#accueil");
+      } catch {
+        sessionStorage.removeItem("lshd-demo-user");
+        location.replace("../../connexion.html");
+      }
+    }
+    verifierAcces();
+  </script>
+</body>
+</html>

@@ -84,7 +84,7 @@ if (loginForm) {
         })
       );
 
-      window.location.href = "espace.html#accueil";
+      window.location.href = "espace_pro/espace.html#accueil";
       return;
     }
 

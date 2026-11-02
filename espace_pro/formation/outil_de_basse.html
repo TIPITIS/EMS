@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LSHD — Outils de base</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .breadcrumb { margin-bottom: 22px; color: var(--muted); font-size: 14px; }
+    .breadcrumb a { color: var(--blue); font-weight: 700; }
+  </style>
+</head>
+<body class="workspace-body" data-access="corp_medical">
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <a class="button button-outline button-small" href="../espace.html#accueil">Retour à l’espace pro</a>
+  </header>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <nav class="breadcrumb">Vous êtes ici : <a href="../espace.html#accueil">Espace professionnel</a> › Formation › <strong>Outils de base</strong></nav>
+      <div class="workspace-heading">
+        <div><p class="eyebrow eyebrow-blue">FORMATION</p><h1>Outils de base</h1><p class="muted">Matériel et outils utilisés par le service.</p></div>
+      </div>
+      <div class="notice"><span>ℹ</span><p><strong>Page à compléter.</strong> La liste du matériel et les consignes d’utilisation seront ajoutées ici.</p></div>
+    </div>
+  </main>
+
+  <footer class="site-footer workspace-footer">
+    <div class="container footer-bottom"><span>© <span data-year></span> LSHD · Projet GTA RP</span><a href="../espace.html#accueil">Retour à l’espace professionnel</a></div>
+  </footer>
+
+  <script src="../../js/app.js" defer></script>
+  <script>
+    function verifierAcces() {
+      try {
+        const user = JSON.parse(sessionStorage.getItem("lshd-demo-user") || "null");
+        if (!user) {
+          location.replace("../../connexion.html");
+          return;
+        }
+
+        const roles = [
+          ...(Array.isArray(user.roles) ? user.roles : []),
+          ...(user.role ? [user.role] : [])
+        ].map(role => role === "Développeur" ? "dev" : role);
+
+        const autorise =
+          roles.some(role => ["dev", "admin", "directeur"].includes(role)) ||
+          roles.includes("corp_medical") ||
+          (user.permissions || []).includes("corp_medical");
+
+        if (!autorise) location.replace("../espace.html#accueil");
+      } catch {
+        sessionStorage.removeItem("lshd-demo-user");
+        location.replace("../../connexion.html");
+      }
+    }
+    verifierAcces();
+  </script>
+</body>
+</html>
