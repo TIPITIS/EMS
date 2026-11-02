@@ -47,25 +47,38 @@
 
   <nav class="workspace-nav" id="workspace-nav" aria-label="Menu de l’espace professionnel">
     <div class="workspace-nav-inner">
-      <a
-        class="workspace-nav-link"
-        href="#accueil"
-        data-page-link="accueil"
-        data-access="connected"
-      >Accueil</a>
-
-      <a
-        class="workspace-nav-link"
-        href="#patients"
-        data-page-link="patients"
-        data-access="connected"
-      >Patients</a>
-
-      <a href="accueil_pro/agenda_pro.html" data-access="connected">Agenda</a>
 
       <div class="nav-group">
         <button class="nav-group-button" type="button" aria-expanded="false">
-          Psychologie <span aria-hidden="true">⌄</span>
+          Accueil <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="accueil_pro/equipe_pro.html" data-access="connected">Équipe professionnelle</a>
+          <a href="accueil_pro/direction_pro.html" data-access="connected">Direction professionnelle</a>
+          <a href="accueil_pro/agenda_pro.html" data-access="connected">Agenda</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="formation/outil_de_basse.html" data-access="corp_medical">Outils de base</a>
+          <a href="formation/tenus.html" data-access="corp_medical">Tenues</a>
+          <a href="formation/vehicule.html" data-access="corp_medical">Véhicules</a>
+        </div>
+      </div>
+
+      <a
+        class="workspace-nav-link"
+        href="formation_medical/en-attente.html"
+        data-access="corp_medical"
+      >Formation médicale</a>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Psy <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
           <a href="psy/ppa.html" data-access="psychologie">PPA</a>
@@ -76,107 +89,48 @@
             data-page-link="psy-pplh"
             data-access="psychologie"
           >PPLH</a>
-          <a href="psy/suivie_patient.html" data-access="psychologie">Suivi patient</a>
         </div>
       </div>
 
       <div class="nav-group">
         <button class="nav-group-button" type="button" aria-expanded="false">
-          Services <span aria-hidden="true">⌄</span>
+          Chirurgie <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a href="formation/outil_de_basse.html" data-access="corp_medical">Outils de base</a>
-          <a href="formation/tenus.html" data-access="corp_medical">Tenues</a>
-          <a href="formation/vehicule.html" data-access="corp_medical">Véhicules</a>
-          <a
-            href="#formation-medicale"
-            data-page-link="formation-medicale"
-            data-access="corp_medical"
-          >Formation médicale</a>
-          <a
-            href="#chirurgie"
-            data-page-link="chirurgie"
-            data-access="chirurgie"
-          >Chirurgie</a>
-          <a
-            href="#generaliste"
-            data-page-link="generaliste"
-            data-access="generaliste"
-          >Médecine générale</a>
-          <a
-            href="#kinesitherapie"
-            data-page-link="kinesitherapie"
-            data-access="kinesitherapie"
-          >Kinésithérapie</a>
-        </div>
-      </div>
-
-      <div class="nav-group">
-        <button class="nav-group-button" type="button" aria-expanded="false">
-          Documents <span aria-hidden="true">⌄</span>
-        </button>
-        <div class="nav-dropdown">
-          <a
-            href="#doc-visite"
-            data-page-link="doc-visite"
-            data-access="corp_medical"
-          >Visite médicale</a>
-          <a
-            href="#doc-arret"
-            data-page-link="doc-arret"
-            data-access="corp_medical"
-          >Arrêt de travail</a>
-          <a
-            href="#doc-blessures"
-            data-page-link="doc-blessures"
-            data-access="medecin"
-          >Coups et blessures</a>
-          <a
-            href="#doc-deces"
-            data-page-link="doc-deces"
-            data-access="medecin_senior|responsable"
-          >Certificat de décès</a>
-          <a
-            href="#doc-registre"
-            data-page-link="doc-registre"
-            data-access="police|medecin|chirurgie|medecin_senior|responsable|directeur_adjoint"
-          >Registre des documents</a>
-        </div>
-      </div>
-
-      <div class="nav-group">
-        <button class="nav-group-button" type="button" aria-expanded="false">
-          Administration <span aria-hidden="true">⌄</span>
-        </button>
-        <div class="nav-dropdown">
-          <a
-            href="#personnel"
-            data-page-link="personnel"
-            data-access="connected"
-          >Mon espace personnel</a>
-          <a
-            href="#haut-grade"
-            data-page-link="haut-grade"
-            data-access="medecin_senior|responsable|directeur_adjoint"
-          >Haut grade</a>
-          <a
-            href="accueil_pro/direction_pro.html"
-            data-access="directeur_adjoint|directeur_irs"
-          >Direction</a>
-          <a
-            href="#dev-logs"
-            data-page-link="dev-logs"
-            data-access="dev|admin|directeur"
-          >Logs développeur</a>
+          <a href="chirugie/formation.html" data-access="chirurgie">Formation</a>
         </div>
       </div>
 
       <a
         class="workspace-nav-link"
-        href="#parametres"
-        data-page-link="parametres"
+        href="generaliste/formation.html"
+        data-access="generaliste"
+      >Généraliste</a>
+
+      <a
+        class="workspace-nav-link"
+        href="personnel/profil.html"
         data-access="connected"
-      >Paramètres</a>
+      >Personnel</a>
+
+      <a
+        class="workspace-nav-link"
+        href="haut_garder/avis.html"
+        data-access="medecin_senior|responsable|directeur_adjoint"
+      >Haut grade</a>
+
+      <a
+        class="workspace-nav-link"
+        href="direction/employer.html"
+        data-access="directeur_adjoint|directeur_irs"
+      >Direction</a>
+
+      <a
+        class="workspace-nav-link"
+        href="dev/logs.html"
+        data-access="dev|admin|directeur"
+      >Dev</a>
+
     </div>
   </nav>
 
