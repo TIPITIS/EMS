@@ -849,19 +849,22 @@ textarea:focus {
   font-size: 11px;
 }
 
+/* La barre reste au-dessus du contenu et ne coupe pas les sous-menus. */
 .workspace-nav {
   position: relative;
-  z-index: 5;
+  z-index: 50;
+  overflow: visible;
   background: #f8fbfd;
   border-bottom: 1px solid var(--line);
 }
 
 .workspace-nav-inner {
+  width: 100%;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 4px;
-  width: 100%;
-  overflow-x: auto;
+  overflow: visible;
   padding: 8px 18px;
 }
 
@@ -884,24 +887,32 @@ textarea:focus {
 
 .workspace-nav-link:hover,
 .nav-group-button:hover,
-.workspace-nav-link.active {
+.workspace-nav-link.active,
+.nav-group-button[aria-expanded="true"] {
   color: var(--navy);
   background: #dcecf8;
 }
 
 .nav-group {
   position: relative;
+  z-index: 1;
   flex: 0 0 auto;
+}
+
+.nav-group:hover,
+.nav-group:focus-within,
+.nav-group.open {
+  z-index: 60;
 }
 
 .nav-dropdown {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 20;
+  z-index: 70;
   width: max-content;
   min-width: 210px;
-  max-width: 280px;
+  max-width: min(280px, calc(100vw - 24px));
   display: none;
   padding: 6px;
   border: 1px solid var(--line);
@@ -920,6 +931,7 @@ textarea:focus {
   border-radius: 6px;
   color: #29394a;
   font-size: 13px;
+  white-space: normal;
 }
 
 .nav-dropdown a:hover,
@@ -933,6 +945,8 @@ textarea:focus {
 }
 
 .workspace-main {
+  position: relative;
+  z-index: 0;
   min-height: calc(100vh - 175px);
   padding: 35px 0 55px;
 }
@@ -1045,63 +1059,6 @@ textarea:focus {
 
 .workspace-footer {
   padding-top: 0;
-}
-
-.site-footer {
-  padding-top: 40px;
-  color: #d6e3ee;
-  background: #091a2e;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 35px;
-  padding-bottom: 30px;
-}
-
-.brand-inverse {
-  color: var(--white);
-}
-
-.brand-inverse .brand-mark {
-  color: #9dd5f0;
-  background: #153958;
-}
-
-.brand-inverse .brand-text small {
-  color: #9dd5f0;
-}
-
-.footer-brand p {
-  margin-top: 13px;
-  color: #aabdd0;
-  font-size: 14px;
-}
-
-.footer-grid h2 {
-  margin: 4px 0 12px;
-  color: #8db8d4;
-  font-size: 12px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-
-.footer-grid > div > a:not(.brand) {
-  display: block;
-  margin: 7px 0;
-  color: #d1dfec;
-  font-size: 14px;
-}
-
-.footer-bottom {
-  min-height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  color: #9eb1c4;
-  font-size: 12px;
 }
 
 /* Adaptation mobile */
@@ -1269,6 +1226,7 @@ textarea:focus {
   .workspace-nav-inner {
     align-items: stretch;
     flex-direction: column;
+    flex-wrap: nowrap;
     overflow: visible;
     padding: 8px 12px;
   }
@@ -1277,6 +1235,10 @@ textarea:focus {
   .nav-group-button {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .nav-group {
+    display: block;
   }
 
   .nav-dropdown {
@@ -1297,6 +1259,37 @@ textarea:focus {
 
   .demo-badge {
     align-self: flex-start;
+  }
+}
+
+/* Les menus s’ouvrent au survol sur ordinateur. */
+@media (hover: hover) and (pointer: fine) and (min-width: 761px) {
+  .nav-group:hover .nav-dropdown,
+  .nav-group:focus-within .nav-dropdown {
+    display: block;
+  }
+}
+
+/* Accessibilité */
+
+.nav-group-button:focus-visible,
+.workspace-nav-link:focus-visible,
+.nav-dropdown a:focus-visible,
+.workspace-menu-toggle:focus-visible {
+  outline: 3px solid rgba(75, 155, 200, 0.45);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
   }
 }
 

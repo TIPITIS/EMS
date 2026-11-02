@@ -53,9 +53,12 @@
           Accueil <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a href="accueil_pro/equipe_pro.html" data-access="connected">Équipe professionnelle</a>
-          <a href="accueil_pro/direction_pro.html" data-access="connected">Direction professionnelle</a>
           <a href="accueil_pro/agenda_pro.html" data-access="connected">Agenda</a>
+          <a
+            href="accueil_pro/direction_pro.html"
+            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
+          >Direction</a>
+          <a href="accueil_pro/equipe_pro.html" data-access="connected">Équipe</a>
         </div>
       </div>
 
@@ -70,11 +73,16 @@
         </div>
       </div>
 
-      <a
-        class="workspace-nav-link"
-        href="formation_medical/en-attente.html"
-        data-access="corp_medical"
-      >Formation médicale</a>
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation médicale <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="formation_medical/en_attente.html" data-access="corp_medical">
+            En attente
+          </a>
+        </div>
+      </div>
 
       <div class="nav-group">
         <button class="nav-group-button" type="button" aria-expanded="false">
@@ -89,6 +97,7 @@
             data-page-link="psy-pplh"
             data-access="psychologie"
           >PPLH</a>
+          <a href="psy/suivie_patient.html" data-access="psychologie">Suivi patient</a>
         </div>
       </div>
 
@@ -101,35 +110,75 @@
         </div>
       </div>
 
-      <a
-        class="workspace-nav-link"
-        href="generaliste/formation.html"
-        data-access="generaliste"
-      >Généraliste</a>
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Généraliste <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="generaliste/formation.html" data-access="generaliste">Formation</a>
+          <a href="generaliste/formation_vm.html" data-access="generaliste">Formation VM</a>
+        </div>
+      </div>
 
-      <a
-        class="workspace-nav-link"
-        href="personnel/profil.html"
-        data-access="connected"
-      >Personnel</a>
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Personnel <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="personnel/profil.html" data-access="connected">Profil</a>
+          <a href="personnel/contrat_de_travail.html" data-access="connected">Contrat de travail</a>
+          <a href="personnel/prise_de_service.html" data-access="connected">Prise de service</a>
+          <a href="personnel/document.html" data-access="connected">Documents</a>
+          <a href="personnel/reglement.html" data-access="connected">Règlement</a>
+          <a href="personnel/salaire.html" data-access="connected">Salaire</a>
+          <a href="personnel/prime.html" data-access="connected">Primes</a>
+        </div>
+      </div>
 
-      <a
-        class="workspace-nav-link"
-        href="haut_garder/avis.html"
-        data-access="medecin_senior|responsable|directeur_adjoint"
-      >Haut grade</a>
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Haut grade <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a
+            href="haut_garder/annonce.html"
+            data-access="medecin_senior|responsable|directeur_adjoint"
+          >Annonce</a>
+          <a
+            href="haut_garder/avis.html"
+            data-access="medecin_senior|responsable|directeur_adjoint"
+          >Avis</a>
+          <a
+            href="haut_garder/permistion.html"
+            data-access="medecin_senior|responsable|directeur_adjoint"
+          >Permissions</a>
+        </div>
+      </div>
 
-      <a
-        class="workspace-nav-link"
-        href="direction/employer.html"
-        data-access="directeur_adjoint|directeur_irs"
-      >Direction</a>
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Direction <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a
+            href="direction/employer.html"
+            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
+          >Employés</a>
+          <a
+            href="direction/comptabiliter.html"
+            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
+          >Comptabilité</a>
+        </div>
+      </div>
 
-      <a
-        class="workspace-nav-link"
-        href="dev/logs.html"
-        data-access="dev|admin|directeur"
-      >Dev</a>
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Dev <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="dev/logs.html" data-access="dev|admin|directeur">Logs</a>
+        </div>
+      </div>
 
     </div>
   </nav>
