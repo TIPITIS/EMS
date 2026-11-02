@@ -3,88 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Espace membre — LSHD</title>
+  <title>Mon espace — LSHD</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/app.js" defer></script>
 </head>
-<body data-protected-page>
-  <div class="topline">
-    <div class="container topline-content">
-      <span aria-hidden="true">✚</span>
-      <span>Los Santos Health Department</span>
-      <span class="topline-note">Espace membre · Démonstration</span>
-    </div>
-  </div>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html">
-        <span class="brand-mark" aria-hidden="true">✚</span>
-        <span class="brand-text">
-          <small>LOS SANTOS</small>
-          <strong>Health Department</strong>
-        </span>
-      </a>
+<body class="workspace-body" data-protected-page>
+  <header class="workspace-header">
+    <a class="workspace-brand" href="espace.html#accueil">
+      <span class="workspace-brand-icon">✚</span>
+      <span>
+        <strong>LSHD</strong>
+        <small>Los Santos Health Department</small>
+      </span>
+    </a>
 
+    <div class="workspace-user">
+      <div class="user-avatar">♙</div>
+      <div class="user-info">
+        <strong data-user-name>membre</strong>
+        <small data-user-role>Grade</small>
+      </div>
       <button class="button button-outline button-small" type="button" data-logout>
-        Se déconnecter
+        Déconnexion
       </button>
     </div>
   </header>
 
-  <main>
-    <section class="page-hero">
-      <div class="container">
-        <p class="eyebrow eyebrow-blue">ESPACE PERSONNEL</p>
-        <h1>Bienvenue, <span data-user-name>membre</span></h1>
-        <p>
-          Grade affiché :
-          <strong data-user-role>non défini</strong>
-        </p>
-      </div>
-    </section>
+  <button
+    class="workspace-menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="workspace-nav"
+  >
+    ☰ <span>Ouvrir le menu</span>
+  </button>
 
-    <section class="section">
-      <div class="container">
-        <div class="notice notice-warning">
-          <span aria-hidden="true">⚠</span>
-          <p>
-            <strong>Mode démonstration.</strong>
-            Cet espace n’est pas réellement protégé. N’y ajoute aucune donnée
-            personnelle ou médicale.
+  <nav class="workspace-nav" id="workspace-nav" aria-label="Menu de l’espace membre">
+    <div class="workspace-nav-inner">
+      <a class="workspace-nav-link active" href="#accueil" data-page-link="accueil">
+        Accueil
+      </a>
+
+      <a class="workspace-nav-link" href="#patients" data-page-link="patients">
+        Patients
+      </a>
+
+      <a class="workspace-nav-link" href="#agenda" data-page-link="agenda">
+        Agenda
+      </a>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Psychologie <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="#psy-ppa" data-page-link="psy-ppa">PPA</a>
+          <a href="#psy-formation-ppa" data-page-link="psy-formation-ppa">Formation PPA</a>
+          <a href="#psy-ppa-police" data-page-link="psy-ppa-police">PPA Police</a>
+          <a href="#psy-formation-ppa-police" data-page-link="psy-formation-ppa-police">Formation PPA Police</a>
+          <a href="#psy-pc" data-page-link="psy-pc">PC</a>
+          <a href="#psy-formation-pc" data-page-link="psy-formation-pc">Formation PC</a>
+          <a href="#psy-pplh" data-page-link="psy-pplh">PPLH</a>
+          <a href="#psy-formation-pplh" data-page-link="psy-formation-pplh">Formation PPLH</a>
+          <a href="#psy-suivi-patient" data-page-link="psy-suivi-patient">Suivi patient</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Addictologie <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="#addicto-bilan" data-page-link="addicto-bilan">Bilan addictologique</a>
+          <a href="#addicto-sevrage" data-page-link="addicto-sevrage">Suivi de sevrage</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Psychiatrie <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="#psychiatrie" data-page-link="psychiatrie">Page à compléter</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Kinésithérapie <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="#kinesitherapie" data-page-link="kinesitherapie">Page à compléter</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Services <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="#formation-outils" data-page-link="formation-outils">Outils de base</a>
+          <a href="#formation-tenues" data-page-link="formation-tenues">Tenues</a>
+          <a href="#formation-vehicules" data-page-link="formation-vehicules">Véhicules</a>
+          <a href="#formation-medicale" data-page-link="formation-medicale">Formation médicale</a>
+          <a href="#chirurgie" data-page-link="chirurgie">Chirurgie</a>
+          <a href="#generaliste" data-page-link="generaliste">Médecine générale</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Documents <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="#doc-visite" data-page-link="doc-visite">Visite médicale</a>
+          <a href="#doc-visite-supervision" data-page-link="doc-visite-supervision">Superviser une visite</a>
+          <a href="#doc-arret" data-page-link="doc-arret">Arrêt de travail</a>
+          <a href="#doc-arret-supervision" data-page-link="doc-arret-supervision">Superviser un arrêt</a>
+          <a href="#doc-blessures" data-page-link="doc-blessures">Attestation de coups et blessures</a>
+          <a href="#doc-deces" data-page-link="doc-deces">Certificat de décès</a>
+          <a href="#doc-registre" data-page-link="doc-registre">Registre des documents</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Administration <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="#personnel" data-page-link="personnel">Personnel</a>
+          <a href="#haut-garde" data-page-link="haut-garde">Haut grade</a>
+          <a href="#direction" data-page-link="direction">Direction</a>
+          <a href="#dev-logs" data-page-link="dev-logs">Logs développeur</a>
+        </div>
+      </div>
+
+      <a class="workspace-nav-link" href="#parametres" data-page-link="parametres">
+        Paramètres
+      </a>
+    </div>
+  </nav>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE MEMBRE</p>
+          <h1 id="workspace-title">Accueil</h1>
+          <p id="workspace-description" class="muted">
+            Bienvenue dans ton espace du LSHD.
           </p>
         </div>
-
-        <div class="card-grid">
-          <a class="portal-card" href="formations.html">
-            <span aria-hidden="true">▤</span>
-            <h2>Formations</h2>
-            <p>Supports et procédures du service</p>
-            <em>Démo V0.1</em>
-          </a>
-
-          <article class="portal-card disabled">
-            <span aria-hidden="true">▧</span>
-            <h2>Personnel</h2>
-            <p>Profil, contrat et documents</p>
-            <em>À venir</em>
-          </article>
-
-          <article class="portal-card disabled">
-            <span aria-hidden="true">✚</span>
-            <h2>Documents médicaux</h2>
-            <p>Registres et attestations</p>
-            <em>À venir</em>
-          </article>
-        </div>
+        <span class="demo-badge">Démonstration V0.1</span>
       </div>
-    </section>
+
+      <div class="notice notice-warning workspace-warning">
+        <span aria-hidden="true">⚠</span>
+        <p>
+          Cet espace est une maquette publique. N’y ajoute pas de vrais dossiers
+          médicaux, mots de passe ou informations personnelles.
+        </p>
+      </div>
+
+      <section id="workspace-content" aria-live="polite"></section>
+    </div>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer workspace-footer">
     <div class="container footer-bottom">
       <span>© <span data-year></span> LSHD · Projet GTA RP</span>
-      <a href="index.html">Retour à l’accueil</a>
+      <a href="index.html">Retour au site public</a>
     </div>
   </footer>
 </body>
