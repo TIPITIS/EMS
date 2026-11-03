@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prise de service — LSHD</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/personnel.css">
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/personnel.js" defer></script>
+</head>
+<body
+  class="workspace-body personnel-body"
+  data-protected-page
+  data-access="connected"
+  data-login-url="../../connexion.html"
+  data-personnel-page="service"
+  data-audit-ignore
+>
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Personnel médical</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <nav class="personnel-nav" aria-label="Menu Personnel">
+    <a href="../espace.html#accueil">Espace professionnel</a>
+    <a href="profil.html">Mon profil</a>
+    <a href="contrat_de_travail.html">Contrat de travail</a>
+    <a class="active" href="prise_de_service.html">Prise de service</a>
+    <a href="reglement.html">Règlement</a>
+    <a href="document.html">Documents</a>
+  </nav>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE PERSONNEL</p>
+          <h1>Prise de service</h1>
+          <p class="muted">Enregistre tes heures de début et de fin de service.</p>
+        </div>
+        <span class="demo-badge">Démonstration</span>
+      </div>
+
+      <section class="personnel-card service-control">
+        <div>
+          <h2 id="service-state-title">Aucun service en cours</h2>
+          <p id="service-state-description" class="muted">
+            Appuie sur le bouton au début de ton service.
+          </p>
+        </div>
+        <div class="service-actions">
+          <button id="service-start" class="button button-primary" type="button">
+            Prendre mon service
+          </button>
+          <button id="service-end" class="button button-outline" type="button" hidden>
+            Terminer mon service
+          </button>
+        </div>
+        <p id="service-feedback" class="personnel-feedback" aria-live="polite"></p>
+      </section>
+
+      <div id="service-weeks" class="service-weeks"></div>
+    </div>
+  </main>
+</body>
+</html>

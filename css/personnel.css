@@ -1,0 +1,325 @@
+.personnel-body {
+  min-height: 100vh;
+  background: #f4f8fb;
+}
+
+.personnel-nav {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fbfd;
+}
+
+.personnel-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  color: #536476;
+  font-size: 14px;
+}
+
+.personnel-nav a:hover,
+.personnel-nav a.active {
+  color: var(--navy);
+  background: #dcecf8;
+}
+
+.personnel-notice {
+  margin-bottom: 18px;
+  padding: 13px 15px;
+  border: 1px solid #f0dfb5;
+  border-radius: 9px;
+  color: #68532a;
+  background: #fff9ec;
+  font-size: 13px;
+}
+
+.personnel-card {
+  margin-bottom: 18px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.personnel-card h2,
+.personnel-card h3 {
+  margin-top: 0;
+  color: var(--navy);
+}
+
+.panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panel-heading h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.panel-heading p {
+  margin: 0;
+}
+
+.personnel-status,
+.document-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid #cfe4f1;
+  border-radius: 999px;
+  color: #246289;
+  background: #eaf6fb;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.personnel-status[data-state="pending"],
+.document-badge[data-state="pending"] {
+  border-color: #f0dfb5;
+  color: #755a20;
+  background: #fff9ec;
+}
+
+.personnel-status[data-state="approved"],
+.document-badge[data-state="approved"] {
+  border-color: #cbe7d5;
+  color: #28734c;
+  background: #effaf3;
+}
+
+.contract-text,
+.regulation-text {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fbfdff;
+}
+
+.contract-text p,
+.regulation-text p {
+  margin: 0 0 12px;
+}
+
+.contract-text p:last-child,
+.regulation-text p:last-child {
+  margin-bottom: 0;
+}
+
+.signature-box,
+.approval-box {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f8fbfd;
+}
+
+.signature-box h2,
+.signature-box h3,
+.approval-box h3 {
+  margin: 0 0 10px;
+  color: var(--navy);
+}
+
+.signature-box input:not([type="checkbox"]) {
+  max-width: 520px;
+}
+
+.check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 15px 0;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.check-row input {
+  width: auto;
+  margin-top: 5px;
+  accent-color: var(--navy-light);
+}
+
+.personnel-feedback {
+  min-height: 20px;
+  margin: 10px 0 0;
+  color: #28734c;
+  font-size: 13px;
+}
+
+.signed-state {
+  padding: 14px 16px;
+  border: 1px solid #cbe7d5;
+  border-radius: 9px;
+  color: #285c3d;
+  background: #effaf3;
+}
+
+.regulation-version {
+  margin-top: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.service-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.service-control h2 {
+  margin: 0 0 4px;
+}
+
+.service-control p {
+  margin: 0;
+}
+
+.service-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.service-control > .personnel-feedback {
+  flex-basis: 100%;
+}
+
+.service-week {
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.service-week h2 {
+  margin: 0 0 4px;
+  color: var(--navy);
+  font-size: 19px;
+}
+
+.week-summary {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.service-table-wrap {
+  overflow-x: auto;
+}
+
+.service-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: center;
+}
+
+.service-table th,
+.service-table td {
+  padding: 9px 10px;
+  border: 1px solid #cbd7e0;
+}
+
+.service-table thead th {
+  color: var(--white);
+  background: var(--navy-light);
+  white-space: nowrap;
+}
+
+.service-table tbody tr:nth-child(even) {
+  background: #f1f7fb;
+}
+
+.service-table tfoot th {
+  color: var(--navy);
+  background: #e8f4fc;
+  text-align: right;
+}
+
+.service-active {
+  color: #a15e1d;
+  font-weight: 700;
+}
+
+.document-list {
+  display: grid;
+  gap: 10px;
+}
+
+.document-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fbfdff;
+}
+
+.document-item strong,
+.document-item small {
+  display: block;
+}
+
+.document-item small {
+  margin-top: 3px;
+  color: var(--muted);
+}
+
+.personnel-empty {
+  padding: 18px;
+  border: 1px dashed #cbd7e0;
+  border-radius: 9px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .workspace-header {
+    align-items: flex-start;
+    padding: 10px 14px;
+  }
+
+  .workspace-user {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .personnel-nav {
+    padding-inline: 10px;
+  }
+
+  .personnel-nav a {
+    padding-inline: 9px;
+    font-size: 13px;
+  }
+
+  .personnel-card {
+    padding: 16px;
+  }
+
+  .service-control {
+    align-items: flex-start;
+  }
+}

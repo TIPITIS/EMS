@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documents juridiques — LSHD</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/avocat.css">
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/avocat.js" defer></script>
+</head>
+<body
+  class="workspace-body lawyer-body"
+  data-protected-page
+  data-access="avocat|dev|admin|directeur"
+  data-login-url="../../connexion.html"
+  data-audit-ignore
+>
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Avocat</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <nav class="lawyer-nav" aria-label="Menu Avocat">
+    <a href="../espace.html#accueil">Espace professionnel</a>
+    <a href="#contrat">Contrats de travail</a>
+    <a href="#reglement">Règlement</a>
+    <a href="#registre">Registre des contrats</a>
+  </nav>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE AVOCAT</p>
+          <h1>Documents juridiques</h1>
+          <p class="muted">Rédaction des modèles et suivi des signatures.</p>
+        </div>
+        <span class="demo-badge">Démonstration</span>
+      </div>
+
+      <div class="lawyer-notice">
+        Les informations sont enregistrées dans ce navigateur de démonstration.
+        Les modèles et signatures ne sont pas encore partagés entre les appareils.
+      </div>
+
+      <section class="lawyer-card" id="contrat">
+        <p class="eyebrow eyebrow-blue">MODÈLES PAR GRADE</p>
+        <h2>Contrat de travail</h2>
+        <p class="muted">
+          Champs automatiques disponibles :
+          <code>{{nom_complet}}</code>,
+          <code>{{nom}}</code>,
+          <code>{{prenom}}</code>,
+          <code>{{grade}}</code>,
+          <code>{{date}}</code>.
+        </p>
+
+        <label for="contract-grade">Grade concerné</label>
+        <select id="contract-grade"></select>
+
+        <label for="contract-template">Texte du contrat</label>
+        <textarea id="contract-template" rows="15"></textarea>
+
+        <div class="lawyer-actions">
+          <button id="save-contract-template" class="button button-primary" type="button">
+            Enregistrer ce modèle
+          </button>
+          <span id="contract-template-status" class="lawyer-feedback" aria-live="polite"></span>
+        </div>
+        <p id="contract-template-version" class="lawyer-small"></p>
+      </section>
+
+      <section class="lawyer-card" id="reglement">
+        <p class="eyebrow eyebrow-blue">DOCUMENT COMMUN</p>
+        <h2>Règlement du LSHD</h2>
+        <p class="muted">
+          Après rédaction, l’avocat signe cette version. Le directeur la valide ensuite.
+          Elle sera alors proposée aux membres.
+        </p>
+
+        <label for="regulation-template">Texte du règlement</label>
+        <textarea id="regulation-template" rows="16"></textarea>
+
+        <div class="lawyer-actions">
+          <button id="save-regulation-template" class="button button-primary" type="button">
+            Enregistrer une nouvelle version
+          </button>
+          <span id="regulation-template-status" class="lawyer-feedback" aria-live="polite"></span>
+        </div>
+
+        <p id="regulation-template-version" class="lawyer-small"></p>
+        <div id="regulation-approval" class="approval-box"></div>
+      </section>
+
+      <section class="lawyer-card" id="registre">
+        <p class="eyebrow eyebrow-blue">SUIVI DES SIGNATURES</p>
+        <h2>Registre des contrats</h2>
+        <p class="muted">
+          Chaque contrat est associé au compte et au grade de la personne.
+          Les trois signatures sont affichées séparément.
+        </p>
+
+        <label for="contract-search">Rechercher une personne</label>
+        <input id="contract-search" type="search" placeholder="Nom ou nom d’utilisateur">
+
+        <div id="contract-register" class="contract-register"></div>
+        <p id="contract-register-empty" class="personnel-empty" hidden>
+          Aucun contrat ne correspond à la recherche.
+        </p>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

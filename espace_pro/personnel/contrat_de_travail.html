@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contrat de travail — LSHD</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/personnel.css">
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/personnel.js" defer></script>
+</head>
+<body
+  class="workspace-body personnel-body"
+  data-protected-page
+  data-access="connected"
+  data-login-url="../../connexion.html"
+  data-personnel-page="contract"
+  data-audit-ignore
+>
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Personnel médical</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <nav class="personnel-nav" aria-label="Menu Personnel">
+    <a href="../espace.html#accueil">Espace professionnel</a>
+    <a href="profil.html">Mon profil</a>
+    <a class="active" href="contrat_de_travail.html">Contrat de travail</a>
+    <a href="prise_de_service.html">Prise de service</a>
+    <a href="reglement.html">Règlement</a>
+    <a href="document.html">Documents</a>
+  </nav>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE PERSONNEL</p>
+          <h1>Mon contrat de travail</h1>
+          <p class="muted">Le contrat affiché correspond à ton grade actuel.</p>
+        </div>
+        <span class="demo-badge">Démonstration</span>
+      </div>
+
+      <div class="personnel-notice">
+        Contrat de jeu de rôle en cours de test. Un changement de grade crée un nouveau
+        contrat à signer et à faire approuver.
+      </div>
+
+      <section class="personnel-card" aria-labelledby="contract-title">
+        <div class="panel-heading">
+          <div>
+            <h2 id="contract-title">Contrat correspondant à ton grade</h2>
+            <p id="contract-grade" class="muted"></p>
+          </div>
+          <span id="contract-status" class="personnel-status"></span>
+        </div>
+
+        <div id="contract-content" class="contract-text"></div>
+
+        <form id="contract-sign-form" class="signature-box">
+          <h3>Signature du membre</h3>
+          <label for="contract-sign-name">Nom complet à signer</label>
+          <input id="contract-sign-name" name="signature" autocomplete="name" required>
+          <label class="check-row">
+            <input id="contract-accept" type="checkbox" required>
+            <span>Je confirme avoir lu et accepté ce contrat de jeu de rôle.</span>
+          </label>
+          <button class="button button-primary" type="submit">Signer le contrat</button>
+          <p id="contract-feedback" class="personnel-feedback" aria-live="polite"></p>
+        </form>
+
+        <div id="contract-signed" class="signature-box" hidden></div>
+
+        <section id="contract-approval" class="approval-box" hidden>
+          <h3>Approbation de la direction</h3>
+          <p id="approval-description" class="muted"></p>
+          <button id="approve-contract" class="button button-primary" type="button">
+            Approuver ce contrat
+          </button>
+          <p id="approval-feedback" class="personnel-feedback" aria-live="polite"></p>
+        </section>
+      </section>
+
+      <section class="personnel-card">
+        <div class="panel-heading">
+          <div>
+            <h2>Mes anciens contrats signés</h2>
+            <p>Les contrats précédents restent conservés après un changement de grade.</p>
+          </div>
+        </div>
+        <div id="contract-history" class="document-list"></div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

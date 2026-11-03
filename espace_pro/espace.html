@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/app.js" defer></script>
 </head>
-
 <body
   class="workspace-body"
   data-protected-page
@@ -54,10 +53,8 @@
         </button>
         <div class="nav-dropdown">
           <a href="accueil_pro/agenda_pro.html" data-access="connected">Agenda</a>
-          <a
-            href="accueil_pro/direction_pro.html"
-            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
-          >Direction</a>
+          <a href="accueil_pro/direction_pro.html"
+             data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Direction</a>
           <a href="accueil_pro/equipe_pro.html" data-access="connected">Équipe</a>
         </div>
       </div>
@@ -78,9 +75,7 @@
           Formation médicale <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a href="formation_medical/en_attente.html" data-access="corp_medical">
-            En attente
-          </a>
+          <a href="formation_medical/en_attente.html" data-access="corp_medical">En attente</a>
         </div>
       </div>
 
@@ -92,11 +87,7 @@
           <a href="psy/ppa.html" data-access="psychologie">PPA</a>
           <a href="psy/ppa_police.html" data-access="psychologie|police">PPA Police</a>
           <a href="psy/pc.html" data-access="psychologie">PC</a>
-          <a
-            href="#psy-pplh"
-            data-page-link="psy-pplh"
-            data-access="psychologie"
-          >PPLH</a>
+          <a href="#psy-pplh" data-page-link="psy-pplh" data-access="psychologie">PPLH</a>
           <a href="psy/suivie_patient.html" data-access="psychologie">Suivi patient</a>
         </div>
       </div>
@@ -137,21 +128,25 @@
 
       <div class="nav-group">
         <button class="nav-group-button" type="button" aria-expanded="false">
+          Avocat <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="avocat/outils.html#contrat" data-access="avocat">Contrat de travail</a>
+          <a href="avocat/outils.html#reglement" data-access="avocat">Règlement</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
           Haut grade <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a
-            href="haut_garder/annonce.html"
-            data-access="medecin_senior|responsable|directeur_adjoint"
-          >Annonce</a>
-          <a
-            href="haut_garder/avis.html"
-            data-access="medecin_senior|responsable|directeur_adjoint"
-          >Avis</a>
-          <a
-            href="haut_garder/permistion.html"
-            data-access="medecin_senior|responsable|directeur_adjoint"
-          >Permissions</a>
+          <a href="haut_garder/annonce.html"
+             data-access="medecin_senior|responsable|directeur_adjoint">Annonce</a>
+          <a href="haut_garder/avis.html"
+             data-access="medecin_senior|responsable|directeur_adjoint">Avis</a>
+          <a href="haut_garder/permistion.html"
+             data-access="medecin_senior|responsable|directeur_adjoint">Permissions</a>
         </div>
       </div>
 
@@ -160,14 +155,10 @@
           Direction <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-dropdown">
-          <a
-            href="direction/employer.html"
-            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
-          >Employés</a>
-          <a
-            href="direction/comptabiliter.html"
-            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
-          >Comptabilité</a>
+          <a href="direction/employer.html"
+             data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Employés</a>
+          <a href="direction/comptabiliter.html"
+             data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Comptabilité</a>
         </div>
       </div>
 
@@ -179,7 +170,6 @@
           <a href="dev/logs.html" data-access="dev|admin|directeur">Logs</a>
         </div>
       </div>
-
     </div>
   </nav>
 
@@ -200,8 +190,7 @@
         <span aria-hidden="true">⚠</span>
         <p>
           <strong>Version de démonstration.</strong>
-          Les formulaires affichent un aperçu dans le navigateur, mais rien n’est enregistré.
-          N’utilise aucune donnée réelle.
+          Les données sont enregistrées dans ce navigateur. N’utilise aucune donnée réelle.
         </p>
       </div>
 

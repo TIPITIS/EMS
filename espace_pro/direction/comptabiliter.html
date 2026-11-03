@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Suivi des dépenses, recettes et soldes du LSHD.">
+  <title>Comptabilité — LSHD</title>
+
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/admin-tools.css">
+  <link rel="stylesheet" href="../../css/admin-tools-theme.css">
+  <link rel="stylesheet" href="../../css/comptabiliter.css">
+
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/comptabiliter.js" defer></script>
+</head>
+
+<body
+  class="workspace-body admin-body"
+  data-protected-page
+  data-access="dev|admin|directeur|directeur_adjoint|directeur_irs"
+  data-login-url="../../connexion.html"
+>
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil" aria-label="Accueil professionnel LSHD">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span>
+        <strong>LSHD</strong>
+        <small>Los Santos Health Department</small>
+      </span>
+    </a>
+
+    <div class="workspace-user">
+      <div class="user-avatar" aria-hidden="true">♙</div>
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Direction</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <button
+    class="workspace-menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="workspace-nav"
+    id="menu-toggle"
+  >
+    ☰ <span>Ouvrir le menu</span>
+  </button>
+
+  <nav class="workspace-nav" id="workspace-nav" aria-label="Menu de l’espace professionnel">
+    <div class="workspace-nav-inner">
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Accueil <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../accueil_pro/agenda_pro.html" data-access="connected">Agenda</a>
+          <a href="../accueil_pro/direction_pro.html" data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Direction</a>
+          <a href="../accueil_pro/equipe_pro.html" data-access="connected">Équipe</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../formation/outil_de_basse.html" data-access="corp_medical">Outils de base</a>
+          <a href="../formation/tenus.html" data-access="corp_medical">Tenues</a>
+          <a href="../formation/vehicule.html" data-access="corp_medical">Véhicules</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation médicale <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../formation_medical/en_attente.html" data-access="corp_medical">En attente</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Psy <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../psy/ppa.html" data-access="psychologie">PPA</a>
+          <a href="../psy/ppa_police.html" data-access="psychologie|police">PPA Police</a>
+          <a href="../psy/pc.html" data-access="psychologie">PC</a>
+          <a href="../espace.html#psy-pplh" data-page-link="psy-pplh" data-access="psychologie">PPLH</a>
+          <a href="../psy/suivie_patient.html" data-access="psychologie">Suivi patient</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Chirurgie <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../chirugie/formation.html" data-access="chirurgie">Formation</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Généraliste <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../generaliste/formation.html" data-access="generaliste">Formation</a>
+          <a href="../generaliste/formation_vm.html" data-access="generaliste">Formation VM</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Personnel <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../personnel/profil.html" data-access="connected">Profil</a>
+          <a href="../personnel/contrat_de_travail.html" data-access="connected">Contrat de travail</a>
+          <a href="../personnel/prise_de_service.html" data-access="connected">Prise de service</a>
+          <a href="../personnel/document.html" data-access="connected">Documents</a>
+          <a href="../personnel/reglement.html" data-access="connected">Règlement</a>
+          <a href="../personnel/salaire.html" data-access="connected">Salaire</a>
+          <a href="../personnel/prime.html" data-access="connected">Primes</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Haut grade <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../haut_garder/annonce.html" data-access="medecin_senior|responsable|directeur_adjoint">Annonce</a>
+          <a href="../haut_garder/avis.html" data-access="medecin_senior|responsable|directeur_adjoint">Avis</a>
+          <a href="../haut_garder/permistion.html" data-access="medecin_senior|responsable|directeur_adjoint">Permissions</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Direction <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="employer.html" data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Employés</a>
+          <a href="comptabiliter.html" class="active" aria-current="page" data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Comptabilité</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Dev <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../dev/logs.html" data-access="dev|admin|directeur">Logs</a>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="admin-main">
+    <div class="admin-container">
+      <header class="admin-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE PROFESSIONNEL · DIRECTION</p>
+          <h1>Comptabilité</h1>
+          <p class="muted">Suivi des dépenses, des recettes importantes et du compte.</p>
+        </div>
+        <span class="demo-badge">Démonstration</span>
+      </header>
+
+      <div class="admin-demo-notice">
+        <strong>Mode démonstration :</strong>
+        le solde estimé part du dernier relevé et évolue avec les opérations notées.
+        Les écarts des relevés hebdomadaires restent visibles dans le registre.
+      </div>
+
+      <section class="accounting-summary" aria-label="Résumé comptable">
+        <article class="accounting-summary-card">
+          <span>Actuellement sur le compte · estimé</span>
+          <strong id="current-balance">Aucun relevé</strong>
+          <small id="current-balance-detail">Ajoute le premier relevé hebdomadaire.</small>
+        </article>
+
+        <article class="accounting-summary-card">
+          <span>Dernier solde vérifié</span>
+          <strong id="latest-balance">Aucun relevé</strong>
+          <small id="latest-balance-date">Aucun relevé hebdomadaire.</small>
+        </article>
+
+        <article class="accounting-summary-card">
+          <span>Écart du dernier relevé</span>
+          <strong id="balance-difference">—</strong>
+          <small id="balance-difference-note">La comparaison commencera au prochain relevé.</small>
+        </article>
+
+        <article class="accounting-summary-card">
+          <span>Dépenses enregistrées</span>
+          <strong id="total-expenses">0 $</strong>
+          <small>Total des dépenses notées.</small>
+        </article>
+
+        <article class="accounting-summary-card">
+          <span>Recettes importantes enregistrées</span>
+          <strong id="total-income">0 $</strong>
+          <small>Les petites recettes peuvent apparaître dans l’écart du relevé.</small>
+        </article>
+      </section>
+
+      <div class="accounting-columns">
+        <section class="admin-panel accounting-form-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Ajouter une opération</h2>
+              <p>Une dépense ou une recette importante.</p>
+            </div>
+          </div>
+
+          <form id="accounting-entry-form" data-audit-ignore>
+            <input id="entry-id" name="id" type="hidden">
+
+            <label class="admin-field" for="entry-type">
+              <span>Type d’opération</span>
+              <select id="entry-type" name="type" required>
+                <option value="expense">Dépense</option>
+                <option value="income">Recette importante</option>
+              </select>
+            </label>
+
+            <label class="admin-field" for="entry-description">
+              <span>Description</span>
+              <input
+                id="entry-description"
+                name="description"
+                type="text"
+                maxlength="100"
+                placeholder="Ex. Achat de matériel médical"
+                required
+              >
+            </label>
+
+            <div class="accounting-form-row">
+              <label class="admin-field" for="entry-amount">
+                <span>Montant en dollars</span>
+                <input
+                  id="entry-amount"
+                  name="amount"
+                  type="number"
+                  min="1"
+                  step="1"
+                  placeholder="Ex. 250"
+                  required
+                >
+              </label>
+
+              <label class="admin-field" for="entry-date">
+                <span>Date</span>
+                <input id="entry-date" name="date" type="date" required>
+              </label>
+            </div>
+
+            <div class="accounting-form-actions">
+              <button class="button button-primary" id="entry-submit" type="submit">
+                Ajouter l’opération
+              </button>
+              <button class="button button-outline" id="entry-cancel" type="button" hidden>
+                Annuler la modification
+              </button>
+            </div>
+
+            <p id="entry-feedback" class="accounting-feedback" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="admin-panel accounting-form-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Relevé hebdomadaire</h2>
+              <p>Saisis le montant réellement présent sur le compte.</p>
+            </div>
+          </div>
+
+          <form id="weekly-balance-form" data-audit-ignore>
+            <input id="balance-id" name="id" type="hidden">
+
+            <label class="admin-field" for="balance-amount">
+              <span>Solde réel en dollars</span>
+              <input
+                id="balance-amount"
+                name="amount"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="Ex. 120000"
+                required
+              >
+            </label>
+
+            <label class="admin-field" for="balance-date">
+              <span>Date du relevé</span>
+              <input id="balance-date" name="date" type="date" required>
+            </label>
+
+            <label class="admin-field" for="balance-note">
+              <span>Note facultative</span>
+              <input
+                id="balance-note"
+                name="note"
+                type="text"
+                maxlength="120"
+                placeholder="Ex. Solde vérifié après la fermeture"
+              >
+            </label>
+
+            <div class="accounting-preview" id="balance-preview" aria-live="polite">
+              Choisis une date et saisis le solde pour voir la comparaison.
+            </div>
+
+            <div class="accounting-form-actions">
+              <button class="button button-primary" id="balance-submit" type="submit">
+                Enregistrer le solde de la semaine
+              </button>
+              <button class="button button-outline" id="balance-cancel" type="button" hidden>
+                Annuler la modification
+              </button>
+            </div>
+
+            <p id="balance-feedback" class="accounting-feedback" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+
+      <section class="admin-panel accounting-history-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Registre comptable par semaine</h2>
+            <p>Dépenses, recettes et relevés de solde réunis dans un seul historique.</p>
+          </div>
+        </div>
+
+        <div class="accounting-filters">
+          <label class="admin-field" for="ledger-search">
+            <span>Rechercher</span>
+            <input
+              id="ledger-search"
+              type="search"
+              placeholder="Description, note, compte ou montant"
+              autocomplete="off"
+            >
+          </label>
+
+          <label class="admin-field" for="ledger-type-filter">
+            <span>Type d’opération</span>
+            <select id="ledger-type-filter">
+              <option value="">Tout le registre</option>
+              <option value="expense">Dépenses</option>
+              <option value="income">Recettes importantes</option>
+              <option value="balance">Relevés hebdomadaires</option>
+            </select>
+          </label>
+
+          <label class="admin-field" for="ledger-week-filter">
+            <span>Semaine</span>
+            <select id="ledger-week-filter">
+              <option value="">Toutes les semaines</option>
+            </select>
+          </label>
+
+          <button class="button button-outline" id="clear-ledger-filters" type="button">
+            Effacer les filtres
+          </button>
+        </div>
+
+        <p class="accounting-result-count" id="ledger-result-count">0 ligne</p>
+
+        <div class="table-scroll">
+          <table class="admin-table accounting-ledger-table">
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Recette</th>
+                <th scope="col">Dépense</th>
+                <th scope="col">Solde réel</th>
+                <th scope="col">Écart</th>
+                <th scope="col">Ajouté par</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="accounting-ledger"></tbody>
+          </table>
+        </div>
+
+        <p class="empty-state" id="ledger-empty">
+          Aucune ligne ne correspond à la recherche ou aux filtres.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer workspace-footer">
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> LSHD · Projet GTA RP</span>
+      <a href="../../index.html">Retour au site public</a>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestion de son profil personnel LSHD.">
+  <title>Mon profil — LSHD</title>
+
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/admin-tools.css">
+  <link rel="stylesheet" href="../../css/admin-tools-theme.css">
+  <link rel="stylesheet" href="../../css/profil.css">
+
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/profil.js" defer></script>
+</head>
+
+<body
+  class="workspace-body admin-body profile-page"
+  data-protected-page
+  data-access="connected"
+  data-login-url="../../connexion.html"
+>
+  <header class="workspace-header profile-sticky-header">
+    <a class="workspace-brand" href="../espace.html#accueil" aria-label="Accueil professionnel LSHD">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span>
+        <strong>LSHD</strong>
+        <small>Los Santos Health Department</small>
+      </span>
+    </a>
+
+    <div class="workspace-user profile-header-user">
+      <div class="profile-header-card" aria-label="Profil du compte connecté">
+        <div class="profile-header-avatar" id="profile-avatar" aria-hidden="true">?</div>
+        <div class="profile-header-identity">
+          <strong id="profile-display-name" data-user-name>Profil à compléter</strong>
+          <small id="profile-role-label" data-user-role>Personnel médical</small>
+        </div>
+      </div>
+
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <button
+    class="workspace-menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="workspace-nav"
+    id="menu-toggle"
+  >
+    ☰ <span>Ouvrir le menu</span>
+  </button>
+
+  <nav class="workspace-nav" id="workspace-nav" aria-label="Menu de l’espace professionnel">
+    <div class="workspace-nav-inner">
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Accueil <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../accueil_pro/agenda_pro.html" data-access="connected">Agenda</a>
+          <a href="../accueil_pro/direction_pro.html" data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Direction</a>
+          <a href="../accueil_pro/equipe_pro.html" data-access="connected">Équipe</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../formation/outil_de_basse.html" data-access="corp_medical">Outils de base</a>
+          <a href="../formation/tenus.html" data-access="corp_medical">Tenues</a>
+          <a href="../formation/vehicule.html" data-access="corp_medical">Véhicules</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation médicale <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../formation_medical/en_attente.html" data-access="corp_medical">En attente</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Psy <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../psy/ppa.html" data-access="psychologie">PPA</a>
+          <a href="../psy/ppa_police.html" data-access="psychologie|police">PPA Police</a>
+          <a href="../psy/pc.html" data-access="psychologie">PC</a>
+          <a href="../espace.html#psy-pplh" data-page-link="psy-pplh" data-access="psychologie">PPLH</a>
+          <a href="../psy/suivie_patient.html" data-access="psychologie">Suivi patient</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Chirurgie <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../chirugie/formation.html" data-access="chirurgie">Formation</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Généraliste <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../generaliste/formation.html" data-access="generaliste">Formation</a>
+          <a href="../generaliste/formation_vm.html" data-access="generaliste">Formation VM</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Personnel <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="profil.html" class="active" aria-current="page" data-access="connected">Profil</a>
+          <a href="contrat_de_travail.html" data-access="connected">Contrat de travail</a>
+          <a href="prise_de_service.html" data-access="connected">Prise de service</a>
+          <a href="document.html" data-access="connected">Documents</a>
+          <a href="reglement.html" data-access="connected">Règlement</a>
+          <a href="salaire.html" data-access="connected">Salaire</a>
+          <a href="prime.html" data-access="connected">Primes</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Haut grade <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../haut_garder/annonce.html" data-access="medecin_senior|responsable|directeur_adjoint">Annonce</a>
+          <a href="../haut_garder/avis.html" data-access="medecin_senior|responsable|directeur_adjoint">Avis</a>
+          <a href="../haut_garder/permistion.html" data-access="medecin_senior|responsable|directeur_adjoint">Permissions</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Direction <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../direction/employer.html" data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Employés</a>
+          <a href="../direction/comptabiliter.html" data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Comptabilité</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Dev <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../dev/logs.html" data-access="dev|admin|directeur">Logs</a>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="admin-main">
+    <div class="admin-container profile-container">
+      <header class="profile-page-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE PERSONNEL</p>
+          <h1>Mon profil</h1>
+          <p class="muted">Gère tes informations et consulte tes permissions.</p>
+        </div>
+      </header>
+
+      <div class="profile-private-note">
+        <strong>Ton espace personnel.</strong>
+        Tu ne peux consulter et modifier que les informations de ton propre compte.
+        Les permissions affichées ici ne sont pas modifiables.
+      </div>
+
+      <div class="admin-demo-notice">
+        <strong>Mode démonstration :</strong>
+        les changements et la photo sont enregistrés dans ce navigateur.
+        N’utilise pas de vraies informations personnelles avant le raccordement sécurisé.
+      </div>
+
+      <div id="profile-unavailable" class="admin-panel empty-state" hidden>
+        Les informations de ce compte ne sont pas disponibles dans cette démonstration.
+        Essaie avec un compte créé depuis la page de création de compte.
+      </div>
+
+      <div class="profile-sections" id="profile-sections" hidden>
+        <section class="admin-panel profile-permissions-panel">
+          <div class="profile-section-heading">
+            <div>
+              <h2>Mes permissions</h2>
+              <p>Ces permissions sont affichées à titre informatif et ne peuvent pas être modifiées ici.</p>
+            </div>
+          </div>
+          <div id="profile-permission-badges" class="profile-permission-badges"></div>
+        </section>
+
+        <section class="admin-panel profile-panel">
+          <div class="profile-section-heading">
+            <div>
+              <h2>Mes informations</h2>
+              <p>Les informations saisies lors de la création de ton compte.</p>
+            </div>
+          </div>
+
+          <form id="profile-info-form" data-audit-ignore>
+            <div class="profile-photo-row">
+              <div class="profile-photo-preview" id="profile-photo-preview" aria-hidden="true">?</div>
+
+              <div class="profile-photo-controls">
+                <label class="admin-field" for="profile-photo">
+                  <span>Photo de profil</span>
+                  <input id="profile-photo" name="photo" type="file" accept="image/*">
+                  <small>Image carrée conseillée. Elle sera réduite pour le profil.</small>
+                </label>
+
+                <button class="button button-outline button-small" id="remove-profile-photo" type="button">
+                  Retirer la photo
+                </button>
+              </div>
+            </div>
+
+            <div class="profile-form-grid">
+              <label class="admin-field" for="profile-last-name">
+                <span>Nom</span>
+                <input
+                  id="profile-last-name"
+                  name="lastName"
+                  type="text"
+                  maxlength="50"
+                  autocomplete="family-name"
+                  required
+                >
+              </label>
+
+              <label class="admin-field" for="profile-first-name">
+                <span>Prénom</span>
+                <input
+                  id="profile-first-name"
+                  name="firstName"
+                  type="text"
+                  maxlength="50"
+                  autocomplete="given-name"
+                  required
+                >
+              </label>
+
+              <label class="admin-field" for="profile-birth-date">
+                <span>Date de naissance</span>
+                <input id="profile-birth-date" name="birthDate" type="date" required>
+              </label>
+
+              <label class="admin-field" for="profile-phone">
+                <span>Numéro</span>
+                <input
+                  id="profile-phone"
+                  name="phone"
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="tel"
+                  maxlength="20"
+                  required
+                >
+              </label>
+
+              <label class="admin-field profile-full-width" for="profile-username">
+                <span>Nom d’utilisateur</span>
+                <input
+                  id="profile-username"
+                  name="username"
+                  type="text"
+                  minlength="3"
+                  maxlength="24"
+                  autocomplete="username"
+                  required
+                >
+                <small>De 3 à 24 caractères : lettres, chiffres, point, tiret ou tiret bas.</small>
+              </label>
+            </div>
+
+            <p id="profile-info-feedback" class="profile-feedback" aria-live="polite"></p>
+
+            <button class="button button-primary" type="submit">
+              Enregistrer mes informations
+            </button>
+          </form>
+        </section>
+
+        <section class="admin-panel profile-panel">
+          <div class="profile-section-heading">
+            <div>
+              <h2>Mon mot de passe</h2>
+              <p>Laisse les champs vides si tu ne souhaites pas le changer.</p>
+            </div>
+          </div>
+
+          <form id="profile-password-form" data-audit-ignore>
+            <label class="admin-field" for="profile-current-password">
+              <span>Mot de passe actuel</span>
+              <input
+                id="profile-current-password"
+                name="currentPassword"
+                type="password"
+                autocomplete="current-password"
+              >
+            </label>
+
+            <div class="profile-form-grid">
+              <label class="admin-field" for="profile-new-password">
+                <span>Nouveau mot de passe</span>
+                <input
+                  id="profile-new-password"
+                  name="newPassword"
+                  type="password"
+                  minlength="6"
+                  autocomplete="new-password"
+                  placeholder="6 caractères minimum"
+                >
+              </label>
+
+              <label class="admin-field" for="profile-confirm-password">
+                <span>Confirmer le nouveau mot de passe</span>
+                <input
+                  id="profile-confirm-password"
+                  name="confirmPassword"
+                  type="password"
+                  minlength="6"
+                  autocomplete="new-password"
+                >
+              </label>
+            </div>
+
+            <p id="profile-password-feedback" class="profile-feedback" aria-live="polite"></p>
+
+            <button class="button button-primary" type="submit">
+              Enregistrer mon mot de passe
+            </button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer workspace-footer">
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> LSHD · Projet GTA RP</span>
+      <a href="../../index.html">Retour au site public</a>
+    </div>
+  </footer>
+</body>
+</html>
