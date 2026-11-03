@@ -1,0 +1,35 @@
+#account-capacity {
+  margin: 0;
+  font-size: 14px;
+}
+
+#account-capacity[data-state="full"] {
+  color: #a15e1d;
+}
+
+.field-help {
+  margin: 5px 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.form-feedback[data-state="success"] {
+  color: #28734c;
+}
+
+.form-feedback[data-state="error"] {
+  color: #a15e1d;
+}
+
+#register-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 600px) {
+  .auth-card-wide .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

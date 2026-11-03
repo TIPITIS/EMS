@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestion des permissions — LSHD</title>
+  <meta name="description" content="Gestion des permissions des comptes LSHD.">
+  <title>Permissions — Espace professionnel LSHD</title>
   <link rel="stylesheet" href="../../css/style.css">
   <link rel="stylesheet" href="../../css/admin-tools.css">
+  <link rel="stylesheet" href="../../css/admin-tools-theme.css">
   <script src="../../js/app.js" defer></script>
   <script src="../../js/admin-tools.js" defer></script>
 </head>
@@ -17,14 +19,19 @@
   data-audit-ignore
 >
   <header class="workspace-header">
-    <a class="workspace-brand" href="../espace.html#accueil">
+    <a class="workspace-brand" href="../espace.html#accueil" aria-label="Accueil professionnel LSHD">
       <span class="workspace-brand-icon" aria-hidden="true">✚</span>
-      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+      <span>
+        <strong>LSHD</strong>
+        <small>Los Santos Health Department</small>
+      </span>
     </a>
+
     <div class="workspace-user">
+      <div class="user-avatar" aria-hidden="true">♙</div>
       <div class="user-info">
         <strong data-user-name>Membre</strong>
-        <small data-user-role>Haut grade</small>
+        <small data-user-role>Personnel médical</small>
       </div>
       <button class="button button-outline button-small" type="button" data-logout>
         Déconnexion
@@ -32,24 +39,167 @@
     </div>
   </header>
 
+  <button
+    class="workspace-menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="workspace-nav"
+    id="menu-toggle"
+  >
+    ☰ <span>Ouvrir le menu</span>
+  </button>
+
+  <nav class="workspace-nav" id="workspace-nav" aria-label="Menu de l’espace professionnel">
+    <div class="workspace-nav-inner">
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Accueil <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../accueil_pro/agenda_pro.html" data-access="connected">Agenda</a>
+          <a href="../accueil_pro/direction_pro.html" data-access="directeur_adjoint|directeur_irs|directeur|admin|dev">Direction</a>
+          <a href="../accueil_pro/equipe_pro.html" data-access="connected">Équipe</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../formation/outil_de_basse.html" data-access="corp_medical">Outils de base</a>
+          <a href="../formation/tenus.html" data-access="corp_medical">Tenues</a>
+          <a href="../formation/vehicule.html" data-access="corp_medical">Véhicules</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Formation médicale <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../formation_medical/en_attente.html" data-access="corp_medical">
+            En attente
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Psy <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../psy/ppa.html" data-access="psychologie">PPA</a>
+          <a href="../psy/ppa_police.html" data-access="psychologie|police">PPA Police</a>
+          <a href="../psy/pc.html" data-access="psychologie">PC</a>
+          <a
+            href="#psy-pplh"
+            data-page-link="psy-pplh"
+            data-access="psychologie"
+          >PPLH</a>
+          <a href="../psy/suivie_patient.html" data-access="psychologie">Suivi patient</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Chirurgie <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../chirugie/formation.html" data-access="chirurgie">Formation</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Généraliste <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../generaliste/formation.html" data-access="generaliste">Formation</a>
+          <a href="../generaliste/formation_vm.html" data-access="generaliste">Formation VM</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Personnel <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../personnel/profil.html" data-access="connected">Profil</a>
+          <a href="../personnel/contrat_de_travail.html" data-access="connected">Contrat de travail</a>
+          <a href="../personnel/prise_de_service.html" data-access="connected">Prise de service</a>
+          <a href="../personnel/document.html" data-access="connected">Documents</a>
+          <a href="../personnel/reglement.html" data-access="connected">Règlement</a>
+          <a href="../personnel/salaire.html" data-access="connected">Salaire</a>
+          <a href="../personnel/prime.html" data-access="connected">Primes</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Haut grade <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a
+            href="annonce.html"
+            data-access="medecin_senior|responsable|directeur_adjoint"
+          >Annonce</a>
+          <a
+            href="avis.html"
+            data-access="medecin_senior|responsable|directeur_adjoint"
+          >Avis</a>
+          <a
+            href="permistion.html"
+            class="active"
+            aria-current="page"
+            data-access="medecin_senior|responsable|directeur_adjoint"
+          >Permissions</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Direction <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a
+            href="../direction/employer.html"
+            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
+          >Employés</a>
+          <a
+            href="../direction/comptabiliter.html"
+            data-access="directeur_adjoint|directeur_irs|directeur|admin|dev"
+          >Comptabilité</a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <button class="nav-group-button" type="button" aria-expanded="false">
+          Dev <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-dropdown">
+          <a href="../dev/logs.html" data-access="dev|admin|directeur">Logs</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
   <main class="admin-main">
     <div class="admin-container">
       <div class="admin-heading">
         <div>
-          <p class="eyebrow eyebrow-blue">HAUT GRADE</p>
+          <p class="eyebrow eyebrow-blue">ESPACE PROFESSIONNEL · HAUT GRADE</p>
           <h1>Permissions des comptes</h1>
           <p class="muted">
             Un seul rôle principal par compte. Les sous-permissions sont cumulables.
           </p>
         </div>
-        <a class="button button-outline" href="../espace.html#accueil">
-          Retour à l’espace pro
-        </a>
+        <span class="demo-badge">Démonstration</span>
       </div>
 
       <div class="admin-demo-notice">
-        <strong>Mode démonstration :</strong>
-        les comptes et permissions sont enregistrés dans le navigateur actuel.
+        <strong>Mode démonstration.</strong>
+        Les comptes et permissions sont enregistrés dans ce navigateur.
         Le dépôt ne contient pas encore d’annuaire de comptes partagé.
       </div>
 
@@ -144,5 +294,12 @@
       </div>
     </div>
   </main>
+
+  <footer class="site-footer workspace-footer">
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> LSHD · Projet GTA RP</span>
+      <a href="../../index.html">Retour au site public</a>
+    </div>
+  </footer>
 </body>
 </html>
