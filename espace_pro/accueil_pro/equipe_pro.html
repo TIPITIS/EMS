@@ -3,45 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LSHD — Équipe professionnelle</title>
+  <title>LSHD — Équipe médicale</title>
   <link rel="stylesheet" href="../../css/style.css">
-  <style>
-    .breadcrumb { margin-bottom: 22px; color: var(--muted); font-size: 14px; }
-    .breadcrumb a { color: var(--blue); font-weight: 700; }
-  </style>
+  <link rel="stylesheet" href="../../css/accueil-pro.css">
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/accueil-pro.js" defer></script>
 </head>
-<body class="workspace-body" data-access="connected">
+
+<body class="workspace-body"
+      data-protected-page
+      data-access="connected"
+      data-login-url="../../connexion.html"
+      data-accueil-pro-page="equipe">
+
   <header class="workspace-header">
     <a class="workspace-brand" href="../espace.html#accueil">
-      <span class="workspace-brand-icon">✚</span>
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
       <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
     </a>
-    <a class="button button-outline button-small" href="../espace.html#accueil">Retour à l’espace pro</a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Personnel médical</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
   </header>
 
   <main class="workspace-main">
     <div class="container workspace-container">
-      <nav class="breadcrumb">Vous êtes ici : <a href="../espace.html#accueil">Espace professionnel</a> › Accueil professionnel › <strong>Équipe</strong></nav>
+      <p class="breadcrumb">
+        <a href="../espace.html#accueil">← Retour à l’espace professionnel</a>
+      </p>
+
       <div class="workspace-heading">
-        <div><p class="eyebrow eyebrow-blue">ACCUEIL PROFESSIONNEL</p><h1>Équipe professionnelle</h1><p class="muted">Les membres et les pôles du LSHD.</p></div>
+        <div>
+          <p class="eyebrow eyebrow-blue">ACCUEIL PROFESSIONNEL</p>
+          <h1>Équipe médicale</h1>
+          <p class="muted">Les membres du corps médical, du médecin senior à l’auxiliaire de soin.</p>
+        </div>
       </div>
-      <div class="notice"><span>ℹ</span><p><strong>Équipe à compléter.</strong> La présentation des membres sera ajoutée ici.</p></div>
+
+      <div class="directory-toolbar">
+        <label>
+          Rechercher un membre
+          <input id="directory-search" type="search" placeholder="Nom, grade, numéro…">
+        </label>
+        <label>
+          Filtrer par grade
+          <select id="directory-role-filter">
+            <option value="">Tous les grades</option>
+          </select>
+        </label>
+      </div>
+
+      <p id="directory-count" class="muted"></p>
+      <div id="directory-list" class="directory-list"></div>
+      <p id="directory-empty" class="empty-state" hidden>Aucun membre ne correspond à la recherche.</p>
+
+      <div class="notice directory-notice">
+        <span aria-hidden="true">ℹ</span>
+        <p>Les coordonnées affichées proviennent des profils enregistrés dans le navigateur de démonstration.</p>
+      </div>
     </div>
   </main>
 
   <footer class="site-footer workspace-footer">
-    <div class="container footer-bottom"><span>© <span data-year></span> LSHD · Projet GTA RP</span><a href="../espace.html#accueil">Retour à l’espace professionnel</a></div>
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> LSHD · Projet GTA RP</span>
+      <a href="../espace.html#accueil">Retour à l’espace professionnel</a>
+    </div>
   </footer>
-
-  <script src="../../js/app.js" defer></script>
-  <script>
-    try {
-      const user = JSON.parse(sessionStorage.getItem("lshd-demo-user") || "null");
-      if (!user) location.replace("../../connexion.html");
-    } catch {
-      sessionStorage.removeItem("lshd-demo-user");
-      location.replace("../../connexion.html");
-    }
-  </script>
 </body>
 </html>

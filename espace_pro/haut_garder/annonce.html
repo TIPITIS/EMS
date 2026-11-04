@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annonces — Haut grade LSHD</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <script src="../../js/app.js" defer></script>
+
+  <style>
+    .announcement-layout { display:grid; grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr); gap:20px; }
+    .announcement-card { padding:22px; border:1px solid var(--line,#d6e3ec); border-radius:14px; background:#fff; box-shadow:0 8px 24px #173d5c0d; }
+    .announcement-card h2 { margin-top:0; }
+    .announcement-form { display:grid; gap:14px; }
+    .announcement-form label { display:grid; gap:6px; font-weight:700; }
+    .announcement-form input, .announcement-form select, .announcement-form textarea,
+    .announcement-search { width:100%; padding:11px 12px; border:1px solid var(--line,#cbd9e3); border-radius:8px; font:inherit; }
+    .announcement-form textarea { min-height:170px; resize:vertical; }
+    .announcement-list { display:grid; gap:12px; margin-top:16px; }
+    .announcement-item { padding:16px; border:1px solid var(--line,#d6e3ec); border-radius:10px; background:#fff; }
+    .announcement-item h3 { margin:8px 0; }
+    .announcement-item p { white-space:pre-wrap; }
+    .announcement-meta { color:var(--muted,#62788a); font-size:13px; }
+    .announcement-actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .announcement-actions button { cursor:pointer; }
+    .announcement-empty { padding:18px; border:1px dashed var(--line,#cbd9e3); border-radius:10px; color:var(--muted,#62788a); }
+    @media(max-width:800px) { .announcement-layout { grid-template-columns:1fr; } }
+  </style>
+</head>
+
+<body class="workspace-body" data-protected-page
+      data-access="medecin_senior|responsable|directeur_adjoint|directeur|admin|dev"
+      data-login-url="../../connexion.html">
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
+    </a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Personnel médical</small>
+      </div>
+      <a class="button button-outline button-small" href="../../accueil_public/annonces.html">Lire les annonces</a>
+      <button class="button button-outline button-small" type="button" data-logout>Déconnexion</button>
+    </div>
+  </header>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+      <p><a href="../espace.html#accueil">← Retour à l’espace professionnel</a></p>
+
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE PROFESSIONNEL · HAUT GRADE</p>
+          <h1>Gestion des annonces</h1>
+          <p class="muted">Crée une annonce pour qu’elle apparaisse sur la page publique du LSHD.</p>
+        </div>
+        <span class="demo-badge">Démonstration</span>
+      </div>
+
+      <div class="notice notice-warning">
+        <span aria-hidden="true">⚠</span>
+        <p><strong>Visibilité publique :</strong> les annonces publiées sont lisibles par les visiteurs du site.</p>
+      </div>
+
+      <div class="announcement-layout">
+        <section class="announcement-card">
+          <h2 id="form-title">Créer une annonce</h2>
+
+          <form class="announcement-form" id="announcement-form">
+            <label>
+              Titre
+              <input id="announcement-title" maxlength="100" required>
+            </label>
+
+            <label>
+              Catégorie
+              <select id="announcement-category" required>
+                <option value="Information">Information</option>
+                <option value="Organisation">Organisation</option>
+                <option value="Formation">Formation</option>
+                <option value="Recrutement">Recrutement</option>
+                <option value="Événement">Événement</option>
+              </select>
+            </label>
+
+            <label>
+              Date de publication
+              <input id="announcement-date" type="date" required>
+            </label>
+
+            <label>
+              Texte de l’annonce
+              <textarea id="announcement-content" maxlength="5000" required></textarea>
+            </label>
+
+            <div class="announcement-actions">
+              <button class="button button-primary" type="submit" id="announcement-submit">Publier l’annonce</button>
+              <button class="button button-outline" type="button" id="announcement-cancel" hidden>Annuler la modification</button>
+            </div>
+            <p id="announcement-feedback" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="announcement-card">
+          <h2>Annonces publiées</h2>
+          <input class="announcement-search" id="announcement-search" type="search" placeholder="Rechercher une annonce">
+          <p id="announcement-count" class="muted"></p>
+          <div id="announcement-list" class="announcement-list"></div>
+          <p id="announcement-empty" class="announcement-empty" hidden>Aucune annonce pour le moment.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const KEY = "lshd-annonces";
+      const form = document.querySelector("#announcement-form");
+      const list = document.querySelector("#announcement-list");
+      const search = document.querySelector("#announcement-search");
+      const feedback = document.querySelector("#announcement-feedback");
+      let editingId = null;
+
+      const today = new Date();
+      document.querySelector("#announcement-date").value =
+        new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+
+      function readAnnouncements() {
+        try {
+          const value = JSON.parse(localStorage.getItem(KEY) || "[]");
+          return Array.isArray(value) ? value : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveAnnouncements(items) {
+        localStorage.setItem(KEY, JSON.stringify(items));
+      }
+
+      function render() {
+        const query = search.value.trim().toLocaleLowerCase("fr-FR");
+        const all = readAnnouncements().sort((a, b) => b.date.localeCompare(a.date));
+        const visible = all.filter(item =>
+          [item.title, item.category, item.content, item.author]
+            .join(" ").toLocaleLowerCase("fr-FR").includes(query)
+        );
+
+        list.replaceChildren();
+        document.querySelector("#announcement-count").textContent =
+          visible.length + (visible.length > 1 ? " annonces" : " annonce");
+        document.querySelector("#announcement-empty").hidden = visible.length > 0;
+
+        visible.forEach(item => {
+          const article = document.createElement("article");
+          article.className = "announcement-item";
+
+          const meta = document.createElement("div");
+          meta.className = "announcement-meta";
+          meta.textContent = `${item.category} · ${item.date} · Publiée par ${item.author}`;
+
+          const title = document.createElement("h3");
+          title.textContent = item.title;
+
+          const content = document.createElement("p");
+          content.textContent = item.content;
+
+          const actions = document.createElement("div");
+          actions.className = "announcement-actions";
+
+          const edit = document.createElement("button");
+          edit.className = "button button-outline button-small";
+          edit.type = "button";
+          edit.textContent = "Modifier";
+          edit.addEventListener("click", () => {
+            editingId = item.id;
+            document.querySelector("#form-title").textContent = "Modifier l’annonce";
+            document.querySelector("#announcement-title").value = item.title;
+            document.querySelector("#announcement-category").value = item.category;
+            document.querySelector("#announcement-date").value = item.date;
+            document.querySelector("#announcement-content").value = item.content;
+            document.querySelector("#announcement-submit").textContent = "Enregistrer les changements";
+            document.querySelector("#announcement-cancel").hidden = false;
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+
+          const remove = document.createElement("button");
+          remove.className = "button button-outline button-small";
+          remove.type = "button";
+          remove.textContent = "Supprimer";
+          remove.addEventListener("click", () => {
+            if (!confirm("Supprimer cette annonce ?")) return;
+            saveAnnouncements(readAnnouncements().filter(entry => entry.id !== item.id));
+            if (window.LSHD) window.LSHD.recordAudit("Suppression d’annonce", item.title);
+            render();
+          });
+
+          actions.append(edit, remove);
+          article.append(meta, title, content, actions);
+          list.append(article);
+        });
+      }
+
+      function resetForm() {
+        editingId = null;
+        form.reset();
+        document.querySelector("#announcement-date").value =
+          new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+        document.querySelector("#form-title").textContent = "Créer une annonce";
+        document.querySelector("#announcement-submit").textContent = "Publier l’annonce";
+        document.querySelector("#announcement-cancel").hidden = true;
+      }
+
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const user = window.LSHD?.readUser();
+        const entries = readAnnouncements();
+        const oldEntry = entries.find(item => item.id === editingId);
+        const entry = {
+          id: editingId || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+          title: document.querySelector("#announcement-title").value.trim(),
+          category: document.querySelector("#announcement-category").value,
+          date: document.querySelector("#announcement-date").value,
+          content: document.querySelector("#announcement-content").value.trim(),
+          author: oldEntry?.author || user?.username || "Équipe LSHD"
+        };
+
+        const updated = editingId
+          ? entries.map(item => item.id === editingId ? entry : item)
+          : [entry, ...entries];
+
+        saveAnnouncements(updated);
+        if (window.LSHD) {
+          window.LSHD.recordAudit(editingId ? "Modification d’annonce" : "Publication d’annonce", entry.title);
+        }
+
+        feedback.textContent = editingId ? "Annonce modifiée." : "Annonce publiée.";
+        resetForm();
+        render();
+      });
+
+      document.querySelector("#announcement-cancel").addEventListener("click", resetForm);
+      search.addEventListener("input", render);
+      render();
+    })();
+  </script>
+</body>
+</html>

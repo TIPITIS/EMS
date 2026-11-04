@@ -6,36 +6,128 @@
   <title>Annonces — LSHD</title>
   <link rel="stylesheet" href="../css/style.css">
   <script src="../js/app.js" defer></script>
+  <style>
+    .announcement-search { width:100%; padding:11px 12px; border:1px solid var(--line,#cbd9e3); border-radius:8px; font:inherit; margin-bottom:18px; }
+    .announcement-list { display:grid; gap:14px; }
+    .announcement-item { padding:20px; border:1px solid var(--line,#d6e3ec); border-radius:12px; background:#fff; }
+    .announcement-item h2 { margin:10px 0; }
+    .announcement-item p { white-space:pre-wrap; }
+    .announcement-meta { color:var(--muted,#62788a); font-size:13px; }
+    .announcement-empty { padding:18px; border:1px dashed var(--line,#cbd9e3); border-radius:10px; color:var(--muted,#62788a); }
+  </style>
 </head>
+
 <body>
-  <div class="topline"><div class="container topline-content"><span>✚</span><span>Los Santos Health Department</span><span class="topline-note">Portail officiel · Serveur GTA RP</span></div></div>
+  <div class="topline">
+    <div class="container topline-content">
+      <span>✚</span><span>Los Santos Health Department</span>
+      <span class="topline-note">Portail officiel · Serveur GTA RP</span>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="../index.html"><span class="brand-mark">✚</span><span class="brand-text"><small>LOS SANTOS</small><strong>Health Department</strong></span></a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav"><span>Menu</span><span>☰</span></button>
-      <div class="header-actions"><a class="button button-outline button-small" href="../connexion.html">Se connecter</a><a class="button button-primary button-small" href="../creation-compte.html">Créer un compte</a></div>
+      <a class="brand" href="../index.html">
+        <span class="brand-mark">✚</span>
+        <span class="brand-text"><small>LOS SANTOS</small><strong>Health Department</strong></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+        <span>Menu</span><span>☰</span>
+      </button>
+      <div class="header-actions">
+        <a class="button button-outline button-small" href="../connexion.html">Se connecter</a>
+        <a class="button button-primary button-small" href="../creation-compte.html">Créer un compte</a>
+      </div>
     </div>
   </header>
+
   <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
     <div class="container nav-inner">
-      <a href="../index.html">Accueil</a><a href="equipe.html">L’équipe</a><a href="direction.html">Direction</a><a class="active" href="annonces.html">Annonces</a><a href="agenda.html">Agenda</a><a href="contact.html">Contact</a>
+      <a href="../index.html">Accueil</a>
+      <a href="equipe.html">L’équipe</a>
+      <a href="direction.html">Direction</a>
+      <a class="active" href="annonces.html">Annonces</a>
+      <a href="agenda.html">Agenda</a>
+      <a href="contact.html">Contact</a>
     </div>
   </nav>
 
   <main>
-    <section class="page-hero"><div class="container"><p class="eyebrow eyebrow-blue">ACTUALITÉS DU SERVICE</p><h1>Annonces</h1><p>Retrouvez ici les informations importantes concernant le LSHD.</p></div></section>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow eyebrow-blue">ACTUALITÉS DU SERVICE</p>
+        <h1>Annonces</h1>
+        <p>Retrouvez les informations publiées par le LSHD.</p>
+      </div>
+    </section>
+
     <section class="section">
       <div class="container narrow">
-        <article class="announcement">
-          <div class="announcement-meta"><span class="status-pill"><span class="status-dot"></span> V0.1</span><span>2 novembre 2026</span></div>
-          <h2>Ouverture du chantier du portail LSHD</h2>
-          <p>La première version du site est en préparation. Elle pose les pages publiques et la structure générale du futur espace membre.</p>
-        </article>
-        <div class="notice"><span>ℹ</span><p>Les annonces sont statiques dans cette version. Leur publication depuis un compte sera ajoutée plus tard.</p></div>
+        <input id="announcement-search" class="announcement-search" type="search" placeholder="Rechercher dans les annonces">
+        <p id="announcement-count" class="muted"></p>
+        <div id="announcement-list" class="announcement-list"></div>
+        <p id="announcement-empty" class="announcement-empty" hidden>Aucune annonce ne correspond à la recherche.</p>
+        <div class="notice">
+          <span>ℹ</span>
+          <p>Cette version de démonstration conserve les annonces dans le navigateur utilisé pour les publier.</p>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="container footer-bottom"><span>© <span data-year></span> LSHD · Projet GTA RP</span><a href="../index.html">Retour à l’accueil</a></div></footer>
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> LSHD · Projet GTA RP</span>
+      <a href="../index.html">Retour à l’accueil</a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const KEY = "lshd-annonces";
+      const search = document.querySelector("#announcement-search");
+      const list = document.querySelector("#announcement-list");
+
+      function render() {
+        let items = [];
+        try {
+          const value = JSON.parse(localStorage.getItem(KEY) || "[]");
+          if (Array.isArray(value)) items = value;
+        } catch {}
+
+        const query = search.value.trim().toLocaleLowerCase("fr-FR");
+        const visible = items
+          .filter(item => [item.title, item.category, item.content, item.author]
+            .join(" ").toLocaleLowerCase("fr-FR").includes(query))
+          .sort((a, b) => b.date.localeCompare(a.date));
+
+        list.replaceChildren();
+        document.querySelector("#announcement-count").textContent =
+          visible.length + (visible.length > 1 ? " annonces publiées" : " annonce publiée");
+        document.querySelector("#announcement-empty").hidden = visible.length > 0;
+
+        visible.forEach(item => {
+          const article = document.createElement("article");
+          article.className = "announcement-item";
+
+          const meta = document.createElement("div");
+          meta.className = "announcement-meta";
+          meta.textContent = `${item.category} · ${item.date}`;
+
+          const title = document.createElement("h2");
+          title.textContent = item.title;
+
+          const content = document.createElement("p");
+          content.textContent = item.content;
+
+          article.append(meta, title, content);
+          list.append(article);
+        });
+      }
+
+      search.addEventListener("input", render);
+      render();
+    })();
+  </script>
 </body>
 </html>

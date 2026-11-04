@@ -3,45 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LSHD — Agenda</title>
+  <title>LSHD — Agenda médical</title>
   <link rel="stylesheet" href="../../css/style.css">
-  <style>
-    .breadcrumb { margin-bottom: 22px; color: var(--muted); font-size: 14px; }
-    .breadcrumb a { color: var(--blue); font-weight: 700; }
-  </style>
+  <link rel="stylesheet" href="../../css/accueil-pro.css">
+  <script src="../../js/app.js" defer></script>
+  <script src="../../js/accueil-pro.js" defer></script>
 </head>
-<body class="workspace-body" data-access="connected">
+
+<body class="workspace-body"
+      data-protected-page
+      data-access="corp_medical|medecin_senior|medecin|medecin_junior|interne|infirmier|auxiliaire_soin|responsable|directeur_adjoint|directeur_irs|directeur|admin|dev"
+      data-login-url="../../connexion.html"
+      data-accueil-pro-page="agenda">
+
   <header class="workspace-header">
     <a class="workspace-brand" href="../espace.html#accueil">
-      <span class="workspace-brand-icon">✚</span>
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
       <span><strong>LSHD</strong><small>Los Santos Health Department</small></span>
     </a>
-    <a class="button button-outline button-small" href="../espace.html#accueil">Retour à l’espace pro</a>
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Personnel médical</small>
+      </div>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
   </header>
 
   <main class="workspace-main">
     <div class="container workspace-container">
-      <nav class="breadcrumb">Vous êtes ici : <a href="../espace.html#accueil">Espace professionnel</a> › Accueil professionnel › <strong>Agenda</strong></nav>
+      <p class="breadcrumb">
+        <a href="../espace.html#accueil">← Retour à l’espace professionnel</a>
+      </p>
+
       <div class="workspace-heading">
-        <div><p class="eyebrow eyebrow-blue">ACCUEIL PROFESSIONNEL</p><h1>Agenda</h1><p class="muted">Réunions, formations et événements du LSHD.</p></div>
+        <div>
+          <p class="eyebrow eyebrow-blue">ACCUEIL PROFESSIONNEL</p>
+          <h1>Agenda médical</h1>
+          <p class="muted">Consulte et organise les rendez-vous du corps médical.</p>
+        </div>
+        <span class="demo-badge">Démonstration</span>
       </div>
-      <div class="notice"><span>ℹ</span><p><strong>Agenda à compléter.</strong> Les dates du service seront ajoutées ici.</p></div>
+
+      <div class="notice notice-warning agenda-notice">
+        <span aria-hidden="true">⚠</span>
+        <p>Les rendez-vous sont enregistrés dans ce navigateur. N’y ajoute pas de données médicales réelles.</p>
+      </div>
+
+      <section class="agenda-layout">
+        <div class="agenda-panel">
+          <div class="agenda-calendar-heading">
+            <button class="button button-outline" id="agenda-previous" type="button" aria-label="Mois précédent">←</button>
+            <h2 id="agenda-month-title">Mois</h2>
+            <button class="button button-outline" id="agenda-next" type="button" aria-label="Mois suivant">→</button>
+          </div>
+
+          <div class="calendar-weekdays" aria-hidden="true">
+            <span>Lun.</span><span>Mar.</span><span>Mer.</span><span>Jeu.</span>
+            <span>Ven.</span><span>Sam.</span><span>Dim.</span>
+          </div>
+          <div id="agenda-calendar" class="calendar-grid"></div>
+        </div>
+
+        <div class="agenda-panel">
+          <h2 id="appointment-list-title">Rendez-vous</h2>
+
+          <div class="agenda-filters">
+            <label>
+              Rechercher
+              <input id="appointment-search" type="search" placeholder="Patient, médecin, motif…">
+            </label>
+            <label>
+              Médecin
+              <select id="appointment-doctor-filter">
+                <option value="">Tous les médecins</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="appointment-list" class="appointment-list"></div>
+          <p id="appointment-empty" class="empty-state" hidden>Aucun rendez-vous pour cette date.</p>
+        </div>
+      </section>
+
+      <section class="agenda-panel appointment-form-panel">
+        <h2 id="appointment-form-title">Ajouter un rendez-vous</h2>
+
+        <form id="appointment-form" class="appointment-form">
+          <input id="appointment-id" type="hidden">
+
+          <label>
+            Patient ou personne reçue
+            <input id="appointment-patient" maxlength="100" required>
+          </label>
+
+          <label>
+            Médecin
+            <select id="appointment-doctor" required>
+              <option value="">Choisir un médecin</option>
+            </select>
+          </label>
+
+          <label>
+            Type de rendez-vous
+            <select id="appointment-type" required>
+              <option>Consultation</option>
+              <option>Suivi</option>
+              <option>Visite médicale</option>
+              <option>Formation</option>
+              <option>Réunion</option>
+              <option>Autre</option>
+            </select>
+          </label>
+
+          <label>
+            Date
+            <input id="appointment-date" type="date" required>
+          </label>
+
+          <label>
+            Heure
+            <input id="appointment-time" type="time" required>
+          </label>
+
+          <label>
+            Durée prévue
+            <select id="appointment-duration">
+              <option value="15">15 minutes</option>
+              <option value="30" selected>30 minutes</option>
+              <option value="45">45 minutes</option>
+              <option value="60">1 heure</option>
+              <option value="90">1 h 30</option>
+              <option value="120">2 heures</option>
+            </select>
+          </label>
+
+          <label class="form-wide">
+            Motif ou note d’organisation
+            <textarea id="appointment-note" rows="3" maxlength="500"></textarea>
+          </label>
+
+          <div class="form-wide agenda-form-actions">
+            <button class="button button-primary" id="appointment-submit" type="submit">
+              Ajouter le rendez-vous
+            </button>
+            <button class="button button-outline" id="appointment-cancel" type="button" hidden>
+              Annuler la modification
+            </button>
+            <span id="appointment-feedback" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
     </div>
   </main>
 
   <footer class="site-footer workspace-footer">
-    <div class="container footer-bottom"><span>© <span data-year></span> LSHD · Projet GTA RP</span><a href="../espace.html#accueil">Retour à l’espace professionnel</a></div>
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> LSHD · Projet GTA RP</span>
+      <a href="../espace.html#accueil">Retour à l’espace professionnel</a>
+    </div>
   </footer>
-
-  <script src="../../js/app.js" defer></script>
-  <script>
-    try {
-      const user = JSON.parse(sessionStorage.getItem("lshd-demo-user") || "null");
-      if (!user) location.replace("../../connexion.html");
-    } catch {
-      sessionStorage.removeItem("lshd-demo-user");
-      location.replace("../../connexion.html");
-    }
-  </script>
 </body>
 </html>

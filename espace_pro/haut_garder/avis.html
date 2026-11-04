@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Suivi des avis sur les membres du LSHD.">
+  <title>Avis sur les employés — LSHD</title>
+
+  <link rel="stylesheet" href="../../css/style.css">
+  <script src="../../js/app.js" defer></script>
+
+  <style>
+    .avis-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.4fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .avis-panel {
+      padding: 22px;
+      border: 1px solid var(--line, #d6e3ec);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(23, 61, 92, .06);
+    }
+
+    .avis-panel h2 {
+      margin-top: 0;
+      color: var(--navy, #173d5c);
+      font-size: 20px;
+    }
+
+    .avis-form {
+      display: grid;
+      gap: 13px;
+    }
+
+    .avis-form label {
+      display: grid;
+      gap: 6px;
+      color: #223448;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .avis-form input,
+    .avis-form select,
+    .avis-form textarea,
+    .avis-search,
+    .avis-filter {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid #cbd7e0;
+      border-radius: 8px;
+      color: #223448;
+      background: #fff;
+      font: inherit;
+    }
+
+    .avis-form textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
+
+    .avis-form input:focus,
+    .avis-form select:focus,
+    .avis-form textarea:focus,
+    .avis-search:focus,
+    .avis-filter:focus {
+      outline: 3px solid rgba(142, 201, 231, .3);
+      border-color: #4b9bc8;
+    }
+
+    .avis-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .avis-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .avis-feedback {
+      min-height: 20px;
+      margin: 0;
+      color: #28734a;
+      font-size: 13px;
+    }
+
+    .avis-feedback.error {
+      color: #a43d36;
+    }
+
+    .avis-notice {
+      margin-bottom: 20px;
+    }
+
+    .avis-list-tools {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(160px, .55fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .avis-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .avis-card {
+      padding: 17px;
+      border: 1px solid var(--line, #d6e3ec);
+      border-radius: 11px;
+      background: #fff;
+    }
+
+    .avis-card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .avis-card h3 {
+      margin: 0 0 5px;
+      color: var(--navy, #173d5c);
+      font-size: 17px;
+    }
+
+    .avis-meta {
+      margin: 0;
+      color: var(--muted, #62788a);
+      font-size: 12px;
+    }
+
+    .avis-badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border: 1px solid #cfe4f1;
+      border-radius: 999px;
+      color: #245b7b;
+      background: #edf7fc;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .avis-card-section {
+      margin-top: 13px;
+    }
+
+    .avis-card-section strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #28445b;
+      font-size: 12px;
+    }
+
+    .avis-card-section p {
+      margin: 0;
+      color: #536476;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .avis-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .avis-card-actions button {
+      cursor: pointer;
+    }
+
+    .avis-empty {
+      padding: 18px;
+      border: 1px dashed #cbd7e0;
+      border-radius: 10px;
+      color: var(--muted, #62788a);
+      text-align: center;
+    }
+
+    .avis-tip {
+      color: var(--muted, #62788a);
+      font-size: 12px;
+    }
+
+    @media (max-width: 850px) {
+      .avis-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .avis-row,
+      .avis-list-tools {
+        grid-template-columns: 1fr;
+      }
+
+      .avis-card-header {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body class="workspace-body"
+      data-protected-page
+      data-access="medecin_senior|responsable|directeur_adjoint|directeur|admin|dev"
+      data-login-url="../../connexion.html">
+
+  <header class="workspace-header">
+    <a class="workspace-brand" href="../espace.html#accueil" aria-label="Accueil professionnel LSHD">
+      <span class="workspace-brand-icon" aria-hidden="true">✚</span>
+      <span>
+        <strong>LSHD</strong>
+        <small>Los Santos Health Department</small>
+      </span>
+    </a>
+
+    <div class="workspace-user">
+      <div class="user-info">
+        <strong data-user-name>Membre</strong>
+        <small data-user-role>Personnel médical</small>
+      </div>
+      <a class="button button-outline button-small" href="../espace.html#accueil">
+        Espace professionnel
+      </a>
+      <button class="button button-outline button-small" type="button" data-logout>
+        Déconnexion
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace-main">
+    <div class="container workspace-container">
+
+      <p class="breadcrumb">
+        <a href="../espace.html#accueil">Espace professionnel</a>
+        › Haut grade
+        › <strong>Avis sur les employés</strong>
+      </p>
+
+      <div class="workspace-heading">
+        <div>
+          <p class="eyebrow eyebrow-blue">ESPACE PROFESSIONNEL · HAUT GRADE</p>
+          <h1>Avis sur les employés</h1>
+          <p class="muted">Suis les compétences et l’évolution des membres du LSHD.</p>
+        </div>
+        <span class="demo-badge">Démonstration</span>
+      </div>
+
+      <div class="notice notice-warning avis-notice">
+        <span aria-hidden="true">⚠</span>
+        <p>
+          <strong>Mode démonstration.</strong>
+          Les avis sont conservés dans le navigateur. Ils ne sont pas encore partagés entre plusieurs appareils.
+        </p>
+      </div>
+
+      <div class="avis-layout">
+        <section class="avis-panel">
+          <h2 id="avis-form-title">Rédiger un avis</h2>
+
+          <form id="avis-form" class="avis-form">
+            <label for="avis-account">Employé enregistré</label>
+            <select id="avis-account">
+              <option value="">Choisir un compte</option>
+            </select>
+
+            <label for="avis-manual-name">
+              Ou saisir le nom de l’employé
+              <input id="avis-manual-name" maxlength="100" placeholder="Prénom et nom">
+            </label>
+
+            <div class="avis-row">
+              <label for="avis-current-grade">
+                Grade actuel
+                <select id="avis-current-grade" required>
+                  <option value="">Choisir le grade</option>
+                  <option value="medecin_senior">Médecin senior</option>
+                  <option value="medecin">Médecin</option>
+                  <option value="medecin_junior">Médecin junior</option>
+                  <option value="interne">Interne</option>
+                  <option value="infirmier">Infirmier</option>
+                  <option value="auxiliaire_soin">Auxiliaire de soin</option>
+                  <option value="responsable">Responsable</option>
+                  <option value="directeur_adjoint">Directeur adjoint</option>
+                  <option value="directeur_irs">Directeur IRS</option>
+                  <option value="directeur">Directeur</option>
+                </select>
+              </label>
+
+              <label for="avis-date">
+                Date de l’avis
+                <input id="avis-date" type="date" required>
+              </label>
+            </div>
+
+            <label for="avis-skills">
+              Compétences maîtrisées
+              <textarea id="avis-skills" maxlength="1500" placeholder="Ex. : prise en charge, communication, procédures maîtrisées…"></textarea>
+            </label>
+
+            <label for="avis-progress">
+              Compétences à travailler
+              <textarea id="avis-progress" maxlength="1500" placeholder="Ex. : gagner en autonomie, améliorer le suivi des dossiers…"></textarea>
+            </label>
+
+            <label for="avis-summary">
+              Bilan et commentaire
+              <textarea id="avis-summary" maxlength="2000" required placeholder="Décris les points importants de l’évaluation."></textarea>
+            </label>
+
+            <label for="avis-recommendation">
+              Recommandation
+              <select id="avis-recommendation" required>
+                <option value="maintien">Maintien au grade actuel</option>
+                <option value="promotion">Proposer une montée en grade</option>
+                <option value="attente">Avis défavorable pour le moment</option>
+              </select>
+            </label>
+
+            <label for="avis-proposed-grade" id="avis-proposed-grade-label" hidden>
+              Grade proposé
+              <select id="avis-proposed-grade">
+                <option value="">Choisir le grade proposé</option>
+                <option value="medecin_senior">Médecin senior</option>
+                <option value="medecin">Médecin</option>
+                <option value="medecin_junior">Médecin junior</option>
+                <option value="interne">Interne</option>
+                <option value="infirmier">Infirmier</option>
+                <option value="auxiliaire_soin">Auxiliaire de soin</option>
+                <option value="responsable">Responsable</option>
+                <option value="directeur_adjoint">Directeur adjoint</option>
+                <option value="directeur_irs">Directeur IRS</option>
+                <option value="directeur">Directeur</option>
+              </select>
+            </label>
+
+            <p class="avis-tip">
+              L’avis est une recommandation. Il ne change pas automatiquement le grade du compte.
+            </p>
+
+            <div class="avis-actions">
+              <button class="button button-primary" id="avis-save" type="submit">
+                Enregistrer l’avis
+              </button>
+              <button class="button button-outline" id="avis-cancel" type="button" hidden>
+                Annuler la modification
+              </button>
+            </div>
+
+            <p id="avis-feedback" class="avis-feedback" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="avis-panel">
+          <h2>Historique des avis</h2>
+
+          <div class="avis-list-tools">
+            <input id="avis-search" class="avis-search" type="search" placeholder="Rechercher un employé ou un avis">
+            <select id="avis-filter" class="avis-filter">
+              <option value="">Toutes les recommandations</option>
+              <option value="maintien">Maintien au grade</option>
+              <option value="promotion">Montée en grade proposée</option>
+              <option value="attente">Avis défavorable</option>
+            </select>
+          </div>
+
+          <p id="avis-count" class="muted"></p>
+          <div id="avis-list" class="avis-list"></div>
+          <p id="avis-empty" class="avis-empty" hidden>Aucun avis ne correspond à la recherche.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer workspace-footer">
+    <div class="container footer-bottom">
+      <span>© <span data-year></span> LSHD · Projet GTA RP</span>
+      <a href="../espace.html#accueil">Retour à l’espace professionnel</a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE_KEY = "lshd-avis-employes";
+      const ROLE_LABELS = {
+        medecin_senior: "Médecin senior",
+        medecin: "Médecin",
+        medecin_junior: "Médecin junior",
+        interne: "Interne",
+        infirmier: "Infirmier",
+        auxiliaire_soin: "Auxiliaire de soin",
+        responsable: "Responsable",
+        directeur_adjoint: "Directeur adjoint",
+        directeur_irs: "Directeur IRS",
+        directeur: "Directeur"
+      };
+
+      const form = document.querySelector("#avis-form");
+      const accountSelect = document.querySelector("#avis-account");
+      const manualName = document.querySelector("#avis-manual-name");
+      const currentGrade = document.querySelector("#avis-current-grade");
+      const dateInput = document.querySelector("#avis-date");
+      const skillsInput = document.querySelector("#avis-skills");
+      const progressInput = document.querySelector("#avis-progress");
+      const summaryInput = document.querySelector("#avis-summary");
+      const recommendationInput = document.querySelector("#avis-recommendation");
+      const proposedGradeLabel = document.querySelector("#avis-proposed-grade-label");
+      const proposedGradeInput = document.querySelector("#avis-proposed-grade");
+      const feedback = document.querySelector("#avis-feedback");
+      const list = document.querySelector("#avis-list");
+      const search = document.querySelector("#avis-search");
+      const filter = document.querySelector("#avis-filter");
+
+      let accounts = [];
+      let editingId = null;
+
+      function localDate() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        return now.toISOString().slice(0, 10);
+      }
+
+      function readJson(key, fallback) {
+        try {
+          const value = JSON.parse(localStorage.getItem(key) || "null");
+          return value === null ? fallback : value;
+        } catch {
+          return fallback;
+        }
+      }
+
+      function readReviews() {
+        const value = readJson(STORAGE_KEY, []);
+        return Array.isArray(value) ? value : [];
+      }
+
+      function saveReviews(items) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      }
+
+      function roleLabel(role) {
+        const normalized = window.LSHD?.normalizePermission
+          ? window.LSHD.normalizePermission(role)
+          : String(role || "");
+        return ROLE_LABELS[normalized] || role || "Grade non renseigné";
+      }
+
+      function accountDisplayName(account) {
+        const firstName = String(account.firstName || "").trim();
+        const lastName = String(account.lastName || "").trim();
+
+        if (firstName && lastName) {
+          return `${firstName.charAt(0).toLocaleUpperCase("fr-FR")}. ${lastName}`;
+        }
+
+        return account.displayName || account.username || "Compte sans nom";
+      }
+
+      function loadAccounts() {
+        const stored = window.LSHD?.readStoredAccounts
+          ? window.LSHD.readStoredAccounts()
+          : readJson("lshd-demo-accounts", []);
+
+        accounts = Array.isArray(stored) ? stored : [];
+        accounts = accounts.filter(account =>
+          account.firstName || account.lastName || account.displayName || account.username
+        );
+
+        accountSelect.replaceChildren(new Option("Choisir un compte", ""));
+
+        accounts
+          .slice()
+          .sort((a, b) => accountDisplayName(a).localeCompare(accountDisplayName(b), "fr"))
+          .forEach(account => {
+            const role = account.primaryRole || account.role || "";
+            const option = new Option(
+              `${accountDisplayName(account)} — ${roleLabel(role)}`,
+              account.username || account.accountId || accountDisplayName(account)
+            );
+            accountSelect.add(option);
+          });
+      }
+
+      function selectedAccount() {
+        const selectedValue = accountSelect.value;
+        if (!selectedValue) return null;
+
+        return accounts.find(account =>
+          (account.username || account.accountId || accountDisplayName(account)) === selectedValue
+        ) || null;
+      }
+
+      function recommendationLabel(value) {
+        if (value === "promotion") return "Montée en grade proposée";
+        if (value === "attente") return "Avis défavorable pour le moment";
+        return "Maintien au grade actuel";
+      }
+
+      function formatDate(value) {
+        if (!value) return "Date non renseignée";
+        const parts = value.split("-");
+        return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : value;
+      }
+
+      function makeText(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        element.textContent = text || "";
+        return element;
+      }
+
+      function render() {
+        const query = search.value.trim().toLocaleLowerCase("fr-FR");
+        const selectedFilter = filter.value;
+
+        const reviews = readReviews()
+          .filter(item => !selectedFilter || item.recommendation === selectedFilter)
+          .filter(item => {
+            const searchable = [
+              item.employeeName,
+              item.currentGradeLabel,
+              item.proposedGradeLabel,
+              item.reviewer,
+              item.skills,
+              item.progress,
+              item.summary,
+              recommendationLabel(item.recommendation)
+            ].join(" ").toLocaleLowerCase("fr-FR");
+
+            return !query || searchable.includes(query);
+          })
+          .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+        list.replaceChildren();
+        document.querySelector("#avis-count").textContent =
+          `${reviews.length} avis${reviews.length === 1 ? "" : " affichés"}`;
+        document.querySelector("#avis-empty").hidden = reviews.length > 0;
+
+        reviews.forEach(item => {
+          const card = document.createElement("article");
+          card.className = "avis-card";
+
+          const header = document.createElement("div");
+          header.className = "avis-card-header";
+
+          const identity = document.createElement("div");
+          identity.append(
+            makeText("h3", "", item.employeeName),
+            makeText(
+              "p",
+              "avis-meta",
+              `${item.currentGradeLabel} · Avis du ${formatDate(item.date)} · Rédigé par ${item.reviewer}`
+            )
+          );
+
+          const badge = makeText("span", "avis-badge", recommendationLabel(item.recommendation));
+          header.append(identity, badge);
+          card.append(header);
+
+          if (item.recommendation === "promotion" && item.proposedGradeLabel) {
+            card.append(makeText("p", "avis-meta", `Grade proposé : ${item.proposedGradeLabel}`));
+          }
+
+          const sections = [
+            ["Compétences maîtrisées", item.skills],
+            ["À travailler", item.progress],
+            ["Bilan", item.summary]
+          ];
+
+          sections.forEach(([title, value]) => {
+            if (!value) return;
+            const section = document.createElement("div");
+            section.className = "avis-card-section";
+            section.append(makeText("strong", "", title), makeText("p", "", value));
+            card.append(section);
+          });
+
+          const actions = document.createElement("div");
+          actions.className = "avis-card-actions";
+
+          const edit = document.createElement("button");
+          edit.type = "button";
+          edit.className = "button button-outline button-small";
+          edit.textContent = "Modifier";
+          edit.addEventListener("click", () => beginEdit(item));
+
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "button button-outline button-small";
+          remove.textContent = "Supprimer";
+          remove.addEventListener("click", () => {
+            if (!confirm(`Supprimer l’avis sur ${item.employeeName} ?`)) return;
+
+            saveReviews(readReviews().filter(review => review.id !== item.id));
+            window.LSHD?.recordAudit("Suppression d’un avis employé", item.employeeName);
+            render();
+          });
+
+          actions.append(edit, remove);
+          card.append(actions);
+          list.append(card);
+        });
+      }
+
+      function resetForm() {
+        editingId = null;
+        form.reset();
+        dateInput.value = localDate();
+        document.querySelector("#avis-form-title").textContent = "Rédiger un avis";
+        document.querySelector("#avis-save").textContent = "Enregistrer l’avis";
+        document.querySelector("#avis-cancel").hidden = true;
+        proposedGradeLabel.hidden = recommendationInput.value !== "promotion";
+        feedback.textContent = "";
+        feedback.classList.remove("error");
+      }
+
+      function beginEdit(item) {
+        editingId = item.id;
+        document.querySelector("#avis-form-title").textContent = "Modifier un avis";
+
+        const account = accounts.find(entry =>
+          entry.username === item.employeeUsername ||
+          entry.accountId === item.employeeAccountId
+        );
+
+        accountSelect.value = account
+          ? (account.username || account.accountId || accountDisplayName(account))
+          : "";
+
+        manualName.value = account ? "" : item.employeeName;
+        currentGrade.value = item.currentGrade || "";
+        dateInput.value = item.date || localDate();
+        skillsInput.value = item.skills || "";
+        progressInput.value = item.progress || "";
+        summaryInput.value = item.summary || "";
+        recommendationInput.value = item.recommendation || "maintien";
+        proposedGradeInput.value = item.proposedGrade || "";
+        proposedGradeLabel.hidden = recommendationInput.value !== "promotion";
+
+        document.querySelector("#avis-save").textContent = "Enregistrer les changements";
+        document.querySelector("#avis-cancel").hidden = false;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      accountSelect.addEventListener("change", () => {
+        if (!accountSelect.value) return;
+
+        const account = selectedAccount();
+        if (!account) return;
+
+        manualName.value = "";
+        const role = window.LSHD?.normalizePermission
+          ? window.LSHD.normalizePermission(account.primaryRole || account.role || "")
+          : account.primaryRole || account.role || "";
+
+        if (ROLE_LABELS[role]) currentGrade.value = role;
+      });
+
+      recommendationInput.addEventListener("change", () => {
+        proposedGradeLabel.hidden = recommendationInput.value !== "promotion";
+        if (recommendationInput.value !== "promotion") proposedGradeInput.value = "";
+      });
+
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        feedback.textContent = "";
+        feedback.classList.remove("error");
+
+        const account = selectedAccount();
+        const employeeName = manualName.value.trim() || (account ? accountDisplayName(account) : "");
+
+        if (!employeeName) {
+          feedback.textContent = "Choisis un compte ou saisis le nom de l’employé.";
+          feedback.classList.add("error");
+          return;
+        }
+
+        if (recommendationInput.value === "promotion" && !proposedGradeInput.value) {
+          feedback.textContent = "Choisis le grade que tu recommandes.";
+          feedback.classList.add("error");
+          return;
+        }
+
+        const user = window.LSHD?.readUser();
+        const reviewerAccount = accounts.find(entry =>
+          String(entry.username || "").toLowerCase() ===
+          String(user?.username || "").toLowerCase()
+        );
+
+        const reviewer = reviewerAccount
+          ? accountDisplayName(reviewerAccount)
+          : user?.username || "Membre LSHD";
+
+        const existing = readReviews().find(item => item.id === editingId);
+
+        const review = {
+          id: editingId || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+          employeeName,
+          employeeUsername: account?.username || "",
+          employeeAccountId: account?.accountId || "",
+          currentGrade: currentGrade.value,
+          currentGradeLabel: roleLabel(currentGrade.value),
+          date: dateInput.value,
+          skills: skillsInput.value.trim(),
+          progress: progressInput.value.trim(),
+          summary: summaryInput.value.trim(),
+          recommendation: recommendationInput.value,
+          proposedGrade: recommendationInput.value === "promotion" ? proposedGradeInput.value : "",
+          proposedGradeLabel: recommendationInput.value === "promotion"
+            ? roleLabel(proposedGradeInput.value)
+            : "",
+          reviewer: existing?.reviewer || reviewer,
+          createdAt: existing?.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
+        const reviews = readReviews();
+        const updated = editingId
+          ? reviews.map(item => item.id === editingId ? review : item)
+          : [review, ...reviews];
+
+        try {
+          saveReviews(updated);
+        } catch {
+          feedback.textContent = "Le navigateur n’a pas pu enregistrer cet avis.";
+          feedback.classList.add("error");
+          return;
+        }
+
+        window.LSHD?.recordAudit(
+          editingId ? "Modification d’un avis employé" : "Création d’un avis employé",
+          `${employeeName} — ${recommendationLabel(review.recommendation)}`
+        );
+
+        feedback.textContent = editingId ? "Avis modifié." : "Avis enregistré.";
+        resetForm();
+        render();
+      });
+
+      document.querySelector("#avis-cancel").addEventListener("click", resetForm);
+      search.addEventListener("input", render);
+      filter.addEventListener("change", render);
+
+      loadAccounts();
+      dateInput.value = localDate();
+      render();
+    })();
+  </script>
+</body>
+</html>
