@@ -1,0 +1,162 @@
+.dev-accounts-page {
+  display: grid;
+  gap: 16px;
+}
+
+.dev-accounts-panel {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: 0 8px 22px rgba(17, 45, 70, 0.06);
+}
+
+.dev-accounts-panel h2 {
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-size: 20px;
+}
+
+.dev-accounts-description {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.dev-accounts-filters {
+  display: grid;
+  grid-template-columns: minmax(220px, 2fr) minmax(180px, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dev-accounts-count {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.dev-accounts-table-wrap {
+  overflow-x: auto;
+}
+
+.dev-accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text);
+  text-align: left;
+}
+
+.dev-accounts-table th,
+.dev-accounts-table td {
+  padding: 11px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.dev-accounts-table th {
+  color: var(--navy);
+  background: #f1f7fb;
+  font-size: 12px;
+}
+
+.dev-accounts-table tbody tr {
+  cursor: pointer;
+}
+
+.dev-accounts-table tbody tr:hover,
+.dev-accounts-table tbody tr.is-selected {
+  background: #edf7fc;
+}
+
+.dev-account-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.dev-account-meta div {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #f8fbfd;
+}
+
+.dev-account-meta span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.dev-account-meta strong {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+
+.dev-account-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.dev-account-full {
+  grid-column: 1 / -1;
+}
+
+.dev-subpermission-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.dev-subpermission-list label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: #fff;
+  font-weight: 400;
+}
+
+.dev-account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dev-account-delete {
+  color: #a52b24;
+  border-color: #e4b7b3;
+}
+
+.dev-account-feedback {
+  min-height: 1.4em;
+  margin: 0;
+  color: #147044;
+}
+
+.dev-account-feedback.is-error {
+  color: #b42318;
+}
+
+@media (max-width: 760px) {
+  .dev-accounts-filters,
+  .dev-account-form,
+  .dev-account-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .dev-account-full {
+    grid-column: auto;
+  }
+
+  .dev-accounts-panel {
+    padding: 15px;
+  }
+}

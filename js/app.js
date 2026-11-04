@@ -40,7 +40,7 @@ function normalizePermission(value) {
     chirurgie: "chirurgie",
     chirurgien: "chirurgie",
     generaliste: "generaliste",
-    "auxiliaire_de_soin": "auxiliaire_soin"
+    auxiliaire_de_soin: "auxiliaire_soin"
   };
 
   return aliases[key] || key;
@@ -63,7 +63,9 @@ function readUser() {
 
   if (!savedAccount) return sessionUser;
 
-  const primaryRole = savedAccount.primaryRole || savedAccount.role || sessionUser.role;
+  const primaryRole =
+    savedAccount.primaryRole || savedAccount.role || sessionUser.role;
+
   const subpermissions = Array.isArray(savedAccount.subpermissions)
     ? savedAccount.subpermissions
     : [];
@@ -144,7 +146,10 @@ function recordAudit(action, details, actorOverride, accountOverride) {
   updatedLogs.unshift(entry);
 
   try {
-    localStorage.setItem(LSHD_KEYS.logs, JSON.stringify(updatedLogs.slice(0, 5000)));
+    localStorage.setItem(
+      LSHD_KEYS.logs,
+      JSON.stringify(updatedLogs.slice(0, 5000))
+    );
   } catch {
     // Si le stockage est plein, on ne bloque pas le fonctionnement du site.
   }
@@ -272,7 +277,8 @@ function setupLogin() {
       );
 
       if (feedback) {
-        feedback.textContent = "Nom d’utilisateur ou mot de passe incorrect.";
+        feedback.textContent =
+          "Nom d’utilisateur ou mot de passe incorrect.";
       }
       return;
     }
@@ -282,8 +288,16 @@ function setupLogin() {
       role: account.role
     };
 
-    sessionStorage.setItem(LSHD_KEYS.session, JSON.stringify(connectedUser));
-    recordAudit("Connexion réussie", "Connexion à l’espace professionnel", connectedUser);
+    sessionStorage.setItem(
+      LSHD_KEYS.session,
+      JSON.stringify(connectedUser)
+    );
+
+    recordAudit(
+      "Connexion réussie",
+      "Connexion à l’espace professionnel",
+      connectedUser
+    );
 
     window.location.href = "espace_pro/espace.html#accueil";
   });
@@ -366,12 +380,14 @@ const workspacePages = {
     title: "Registre des documents",
     description: "Documents préparés dans cette maquette.",
     message: "Aucun document n’est conservé par le site.",
-    access: "police|medecin|chirurgie|medecin_senior|responsable|directeur_adjoint"
+    access:
+      "police|medecin|chirurgie|medecin_senior|responsable|directeur_adjoint"
   },
   personnel: {
     title: "Mon espace personnel",
     description: "Informations liées à ton compte LSHD.",
-    message: "Le profil, le contrat, le règlement, le salaire et les primes seront regroupés ici.",
+    message:
+      "Le profil, le contrat, le règlement, le salaire et les primes seront regroupés ici.",
     access: "connected"
   },
   "haut-grade": {
@@ -444,8 +460,11 @@ function renderWorkspacePage(user) {
     intro.className = "welcome-panel";
 
     const greeting = document.createElement("p");
+    const identity = getProfileIdentity(user);
     greeting.textContent =
-      "Bienvenue, " + (user.username || "membre") + ", dans ton espace professionnel.";
+      "Bienvenue, " +
+      (identity.displayName || user.username || "membre") +
+      ", dans ton espace professionnel.";
 
     const note = document.createElement("p");
     note.textContent =
@@ -460,9 +479,19 @@ function renderWorkspacePage(user) {
       ["Patients", "Accéder à l’espace patients.", "patients", "connected"],
       ["Agenda", "Voir les dates du service.", "agenda", "connected"],
       ["PPLH", "Ouvrir la rubrique psychologie.", "psy-pplh", "psychologie"],
-      ["Formation médicale", "Retrouver les supports.", "formation-medicale", "corp_medical"],
+      [
+        "Formation médicale",
+        "Retrouver les supports.",
+        "formation-medicale",
+        "corp_medical"
+      ],
       ["Chirurgie", "Outils du pôle chirurgie.", "chirurgie", "chirurgie"],
-      ["Mon espace personnel", "Informations de ton compte.", "personnel", "connected"]
+      [
+        "Mon espace personnel",
+        "Informations de ton compte.",
+        "personnel",
+        "connected"
+      ]
     ];
 
     shortcuts.forEach(item => {
@@ -489,6 +518,227 @@ function renderWorkspacePage(user) {
   content.append(panel);
 }
 
+const PROFILE_ROLE_LABELS = {
+  dev: "Développeur",
+  admin: "Administrateur",
+  directeur: "Directeur",
+  directeur_adjoint: "Directeur adjoint",
+  responsable: "Responsable",
+  medecin_senior: "Médecin senior",
+  medecin: "Médecin",
+  medecin_junior: "Médecin junior",
+  interne: "Interne",
+  infirmier: "Infirmier",
+  auxiliaire_soin: "Auxiliaire de soin",
+  directeur_irs: "Directeur IRS",
+  police: "Police",
+  avocat: "Avocat"
+};
+
+const PROFILE_ROLE_PREFIXES = {
+  medecin_senior: "Dr",
+  medecin: "Dr",
+  medecin_junior: "Dr",
+  responsable: "Dr",
+  directeur_adjoint: "Dir. adj.",
+  directeur: "Dir.",
+  directeur_irs: "Dir. IRS",
+  admin: "Admin",
+  dev: "Dev",
+  interne: "Interne",
+  infirmier: "Infirmier",
+  auxiliaire_soin: "Aux.",
+  police: "Police",
+  avocat: "Me"
+};
+
+function getAccountForUser(user) {
+  const username = String(user?.username || "").trim().toLowerCase();
+  if (!username) return null;
+
+  return readStoredAccounts().find(account =>
+    String(account.username || "").trim().toLowerCase() === username
+  ) || null;
+}
+
+function getProfileIdentity(user) {
+  const account = getAccountForUser(user);
+  const role = normalizePermission(
+    account?.primaryRole || account?.role || user?.role || ""
+  );
+
+  const firstName = String(account?.firstName || "").trim();
+  const lastName = String(account?.lastName || "").trim();
+
+  const baseName = firstName && lastName
+    ? firstName.charAt(0).toLocaleUpperCase("fr-FR") + ". " + lastName
+    : lastName ||
+      firstName ||
+      account?.displayName ||
+      user?.username ||
+      "Membre";
+
+  const prefix = PROFILE_ROLE_PREFIXES[role];
+
+  return {
+    account,
+    role,
+    displayName: prefix ? prefix + " " + baseName : baseName,
+    roleLabel: PROFILE_ROLE_LABELS[role] || user?.role || "Personnel médical",
+    initial: (firstName || lastName || user?.username || "?")
+      .charAt(0)
+      .toLocaleUpperCase("fr-FR"),
+    photo: String(account?.profilePhoto || "")
+  };
+}
+
+function installProfileHeaderStyles() {
+  if (document.querySelector("#lshd-profile-header-styles")) return;
+
+  const style = document.createElement("style");
+  style.id = "lshd-profile-header-styles";
+  style.textContent = `
+    .workspace-user.profile-header-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .workspace-user .profile-header-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 190px;
+      max-width: 340px;
+      padding: 7px 12px 7px 8px;
+      border: 1px solid var(--line, #d6e3ec);
+      border-radius: 12px;
+      background: var(--white, #fff);
+    }
+
+    .workspace-user .profile-header-avatar {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      overflow: hidden;
+      width: 42px;
+      height: 42px;
+      border: 1px solid #cfe4f1;
+      border-radius: 50%;
+      color: var(--navy-light, #357eb3);
+      background: #e9f4fb;
+      font-weight: 700;
+    }
+
+    .workspace-user .profile-header-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .workspace-user .profile-header-identity {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .workspace-user .profile-header-identity [data-user-name] {
+      overflow: hidden;
+      color: var(--navy, #173d5c);
+      font-size: 14px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .workspace-user .profile-header-identity [data-user-role] {
+      color: var(--muted, #62788a);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 760px) {
+      .workspace-user .profile-header-card {
+        min-width: 0;
+        max-width: 220px;
+        padding: 5px 8px 5px 5px;
+        gap: 7px;
+      }
+
+      .workspace-user .profile-header-avatar {
+        width: 36px;
+        height: 36px;
+      }
+
+      .workspace-user .profile-header-identity [data-user-name] {
+        max-width: 125px;
+        font-size: 12px;
+      }
+
+      .workspace-user .profile-header-identity [data-user-role] {
+        font-size: 9px;
+      }
+    }
+  `;
+
+  document.head.append(style);
+}
+
+function renderWorkspaceIdentity(user) {
+  const identity = getProfileIdentity(user);
+  const header = document.querySelector(".workspace-user");
+
+  document.querySelectorAll("[data-user-name]").forEach(element => {
+    element.textContent = identity.displayName;
+  });
+
+  document.querySelectorAll("[data-user-role]").forEach(element => {
+    element.textContent = identity.roleLabel;
+  });
+
+  if (!header) return;
+
+  let card = header.querySelector(".profile-header-card");
+
+  if (!card) {
+    const oldAvatar = header.querySelector(".user-avatar");
+    const oldInfo = header.querySelector(".user-info");
+
+    if (!oldAvatar || !oldInfo) return;
+
+    card = document.createElement("div");
+    card.className = "profile-header-card";
+
+    oldAvatar.classList.add("profile-header-avatar");
+    oldInfo.classList.add("profile-header-identity");
+
+    card.append(oldAvatar, oldInfo);
+    header.insertBefore(card, header.firstChild);
+  }
+
+  header.classList.add("profile-header-user");
+  card.setAttribute("aria-label", "Profil de " + identity.displayName);
+
+  const avatar = card.querySelector(
+    ".profile-header-avatar, #profile-avatar"
+  );
+
+  if (avatar) {
+    avatar.replaceChildren();
+
+    if (identity.photo) {
+      const image = document.createElement("img");
+      image.src = identity.photo;
+      image.alt = "";
+      avatar.append(image);
+    } else {
+      avatar.textContent = identity.initial;
+    }
+  }
+}
+
 function setupWorkspace(user) {
   const isProtected = document.body.hasAttribute("data-protected-page");
   const pageAccess = document.body.dataset.access || "connected";
@@ -505,17 +755,8 @@ function setupWorkspace(user) {
     return;
   }
 
-  document.querySelectorAll("[data-user-name]").forEach(element => {
-    element.textContent = user.username || "Membre";
-  });
-
-  document.querySelectorAll("[data-user-role]").forEach(element => {
-    element.textContent =
-      user.role ||
-      (Array.isArray(user.roles) ? user.roles.join(", ") : "") ||
-      "Personnel médical";
-  });
-
+  installProfileHeaderStyles();
+  renderWorkspaceIdentity(user);
   applyAccessRules(user);
 
   if (document.querySelector(".workspace-nav")) {
@@ -529,6 +770,7 @@ function setupWorkspace(user) {
     menuButton.addEventListener("click", () => {
       const isOpen = navigation.classList.toggle("open");
       menuButton.setAttribute("aria-expanded", String(isOpen));
+
       menuButton.querySelector("span").textContent =
         isOpen ? "Fermer le menu" : "Ouvrir le menu";
     });
@@ -537,6 +779,7 @@ function setupWorkspace(user) {
   recordAudit("Consultation de page", document.title, user);
 
   renderWorkspacePage(user);
+
   window.addEventListener("hashchange", () => {
     recordAudit("Navigation interne", window.location.hash, user);
     renderWorkspacePage(user);
@@ -551,7 +794,11 @@ function setupAuditCapture() {
     const target = event.target.closest("a, button");
     if (!target || target.hasAttribute("data-logout")) return;
 
-    const label = (target.innerText || target.getAttribute("aria-label") || "")
+    const label = (
+      target.innerText ||
+      target.getAttribute("aria-label") ||
+      ""
+    )
       .trim()
       .replace(/\s+/g, " ");
 
@@ -568,13 +815,25 @@ function setupAuditCapture() {
     if (event.target.closest("[data-audit-ignore]")) return;
 
     const field = event.target;
-    if (!(field instanceof HTMLInputElement ||
-          field instanceof HTMLSelectElement ||
-          field instanceof HTMLTextAreaElement)) return;
+
+    if (
+      !(
+        field instanceof HTMLInputElement ||
+        field instanceof HTMLSelectElement ||
+        field instanceof HTMLTextAreaElement
+      )
+    ) {
+      return;
+    }
 
     if (field.type === "password") return;
 
-    const label = field.labels?.[0]?.innerText || field.name || field.id || "Champ";
+    const label =
+      field.labels?.[0]?.innerText ||
+      field.name ||
+      field.id ||
+      "Champ";
+
     recordAudit("Modification d’un champ", label.trim());
   });
 
@@ -624,6 +883,7 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
 
       const feedback = form.querySelector(".form-feedback");
+
       if (feedback) {
         feedback.textContent =
           "Maquette de démonstration : rien n’est enregistré ou envoyé.";

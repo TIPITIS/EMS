@@ -27,7 +27,6 @@ function registeredTestAccounts(accounts) {
 
 function showAuthFeedback(element, message, state = "error") {
   if (!element) return;
-
   element.textContent = message;
   element.dataset.state = state;
 }
@@ -71,7 +70,12 @@ function localDateString() {
 
 function auditAuth(action, details, username) {
   if (window.LSHD?.recordAudit) {
-    window.LSHD.recordAudit(action, details, null, username || "Nom non renseigné");
+    window.LSHD.recordAudit(
+      action,
+      details,
+      null,
+      username || "Nom non renseigné"
+    );
   }
 }
 
@@ -86,7 +90,10 @@ async function handleLogin(form) {
   showAuthFeedback(feedback, "");
 
   if (!username || !password) {
-    showAuthFeedback(feedback, "Saisis ton nom d’utilisateur et ton mot de passe.");
+    showAuthFeedback(
+      feedback,
+      "Saisis ton nom d’utilisateur et ton mot de passe."
+    );
     return;
   }
 
@@ -105,7 +112,6 @@ async function handleLogin(form) {
     }
   }
 
-  // Le compte développeur historique reste utilisable pour les tests.
   if (!validAccount && username === "dev" && password === "1212") {
     validAccount = {
       username: "dev",
@@ -121,8 +127,21 @@ async function handleLogin(form) {
       "Nom d’utilisateur ou mot de passe incorrect",
       username
     );
-    showAuthFeedback(feedback, "Nom d’utilisateur ou mot de passe incorrect.");
+    showAuthFeedback(
+      feedback,
+      "Nom d’utilisateur ou mot de passe incorrect."
+    );
     return;
+  }
+
+  if (savedAccount && validAccount === savedAccount) {
+    savedAccount.lastLoginAt = new Date().toISOString();
+
+    try {
+      localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(accounts));
+    } catch {
+      // La connexion continue si la date ne peut pas être enregistrée.
+    }
   }
 
   const primaryRole =
@@ -139,7 +158,10 @@ async function handleLogin(form) {
       : []
   };
 
-  sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(connectedUser));
+  sessionStorage.setItem(
+    AUTH_SESSION_KEY,
+    JSON.stringify(connectedUser)
+  );
 
   auditAuth(
     "Connexion réussie",
@@ -159,7 +181,9 @@ async function handleRegistration(form) {
   const birthDate = birthDateInput.value;
   const phoneInput = form.querySelector("#phone").value.trim();
   const phone = normalizePhone(phoneInput);
-  const username = normalizeUsername(form.querySelector("#new-username").value);
+  const username = normalizeUsername(
+    form.querySelector("#new-username").value
+  );
   const password = form.querySelector("#new-password").value;
 
   showAuthFeedback(feedback, "");
@@ -177,17 +201,26 @@ async function handleRegistration(form) {
   }
 
   if (!lastName || !firstName || !birthDate || !phoneInput || !username || !password) {
-    showAuthFeedback(feedback, "Remplis tous les champs pour créer le compte.");
+    showAuthFeedback(
+      feedback,
+      "Remplis tous les champs pour créer le compte."
+    );
     return;
   }
 
   if (phone.length < 5 || phone.length > 15) {
-    showAuthFeedback(feedback, "Vérifie le numéro : il doit contenir entre 5 et 15 chiffres.");
+    showAuthFeedback(
+      feedback,
+      "Vérifie le numéro : il doit contenir entre 5 et 15 chiffres."
+    );
     return;
   }
 
   if (birthDate > localDateString()) {
-    showAuthFeedback(feedback, "La date de naissance ne peut pas être dans le futur.");
+    showAuthFeedback(
+      feedback,
+      "La date de naissance ne peut pas être dans le futur."
+    );
     return;
   }
 
@@ -200,7 +233,10 @@ async function handleRegistration(form) {
   }
 
   if (password.length < 6) {
-    showAuthFeedback(feedback, "Le mot de passe doit contenir au moins 6 caractères.");
+    showAuthFeedback(
+      feedback,
+      "Le mot de passe doit contenir au moins 6 caractères."
+    );
     return;
   }
 
@@ -214,11 +250,15 @@ async function handleRegistration(form) {
   if (registeredAccounts.some(account =>
     normalizePhone(account.phone) === phone
   )) {
-    showAuthFeedback(feedback, "Ce numéro est déjà utilisé par un compte de test.");
+    showAuthFeedback(
+      feedback,
+      "Ce numéro est déjà utilisé par un compte de test."
+    );
     return;
   }
 
   const accountId = `LSHD-${Date.now()}`;
+
   const account = {
     username,
     displayName: `${firstName} ${lastName}`,
@@ -232,6 +272,7 @@ async function handleRegistration(form) {
     subpermissions: [],
     passwordHash: await makePasswordHash(password),
     createdAt: new Date().toISOString(),
+    lastLoginAt: null,
     createdBySignup: true
   };
 
@@ -249,7 +290,6 @@ async function handleRegistration(form) {
   }
 
   auditAuth("Création de compte", "Compte de test créé", username);
-
   form.reset();
   updateAccountLimit();
 
@@ -263,7 +303,6 @@ async function handleRegistration(form) {
 document.addEventListener("DOMContentLoaded", () => {
   const dateInput = document.querySelector("#birth-date");
   if (dateInput) dateInput.max = localDateString();
-
   updateAccountLimit();
 });
 
@@ -272,7 +311,6 @@ document.addEventListener("submit", event => {
 
   if (form.id !== "login-form" && form.id !== "register-form") return;
 
-  // Empêche les anciens gestionnaires de démo de bloquer les formulaires.
   event.preventDefault();
   event.stopImmediatePropagation();
 
